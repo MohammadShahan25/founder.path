@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FounderPath — The Entrepreneur's Playground</title>
+  <meta name="description" content="250 decisions. 10 stages. 1 journey from dreamer to founder." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- GLOBAL CONFETTI CANVAS (always on top, only animated on completion) -->
+<canvas id="confettiCanvas" class="confetti-canvas hidden"></canvas>
+
+<!-- WARNING BANNER (market alert, once per 2 hours) -->
+<div id="warningBanner" class="warning-banner hidden">
+  <span class="warning-icon">⚠</span>
+  <span id="warningBannerText"></span>
+  <button onclick="document.getElementById('warningBanner').classList.add('hidden')" class="warning-close">✕</button>
+</div>
+
+<!-- NIGHT MODE TOGGLE -->
+<button class="night-toggle" id="nightToggle" title="Toggle Night Mode">
+  <span class="night-toggle-icon" id="nightToggleIcon">&#9790;</span>
+</button>
+
+<!-- ===================== LANDING PAGE ===================== -->
+<div id="landing" class="page active">
+  <div class="landing-bg">
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="grain"></div>
+    <div class="light-beam beam-1"></div>
+    <div class="light-beam beam-2"></div>
+    <div class="light-beam beam-3"></div>
+    <div class="floating-words">
+      <span class="fw fw-1">PIVOT</span><span class="fw fw-2">SCALE</span>
+      <span class="fw fw-3">LAUNCH</span><span class="fw fw-4">FAIL</span>
+      <span class="fw fw-5">LEARN</span><span class="fw fw-6">BUILD</span>
+      <span class="fw fw-7">RAISE</span><span class="fw fw-8">ITERATE</span>
+      <span class="fw fw-9">SHIP</span><span class="fw fw-10">GROW</span>
+    </div>
+  </div>
+
+  <nav class="landing-nav">
+    <div class="logo-lockup">
+      <div class="logo-mark">FP</div>
+      <span class="logo-text">FounderPath</span>
+    </div>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#stages" class="nav-link">Stages</a>
+      <a href="#dictionary-preview" class="nav-link">Dictionary</a>
+    </div>
+    <button class="nav-cta-btn" id="startBtnNav">Start Free</button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero-section" id="hero">
+    <div class="hero-eyebrow">The Entrepreneur's Playground</div>
+    <h1 class="hero-title">
+      <span class="title-line-1">Founder</span><span class="title-line-2">Path</span>
+    </h1>
+    <p class="hero-sub">10 stages. 250 decisions. Every choice has consequences.<br>From the first spark of an idea to leaving a legacy behind.</p>
+    <div class="hero-cta-row">
+      <button class="cta-btn" id="startBtn">
+        <span class="cta-text">Start Your Journey</span>
+        <span class="cta-arrow">&#8594;</span>
+      </button>
+      <div class="hero-pill">No account needed. Free forever.</div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">250</span><span class="stat-label">Skills</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">10</span><span class="stat-label">Stages</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">200+</span><span class="stat-label">Market Scenarios</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">100+</span><span class="stat-label">Dictionary Terms</span></div>
+    </div>
+  </div>
+
+  <!-- SOCIAL PROOF STRIP - scrolling -->
+  <div class="proof-strip-wrap">
+    <div class="proof-strip-track">
+      <span class="proof-item">"The most honest startup education I have ever encountered."</span><span class="proof-dot"></span>
+      <span class="proof-item">"Zara made me feel like a fraud — in the absolute best way."</span><span class="proof-dot"></span>
+      <span class="proof-item">"I wish I had this before my first company. Would have saved two years."</span><span class="proof-dot"></span>
+      <span class="proof-item">"The crisis events are terrifyingly accurate to real life."</span><span class="proof-dot"></span>
+      <span class="proof-item">"This is the MBA I actually needed — and it cost nothing."</span><span class="proof-dot"></span>
+      <span class="proof-item">"The Market Simulation kept me up until 2am three nights in a row."</span><span class="proof-dot"></span>
+      <span class="proof-item">"I failed my first startup. This is exactly what I should have studied first."</span><span class="proof-dot"></span>
+      <span class="proof-item">"Better than any business book I have read. No comparison."</span><span class="proof-dot"></span>
+      <span class="proof-item">"The characters feel real. Especially Leo — I have been Leo."</span><span class="proof-dot"></span>
+      <span class="proof-item">"Every decision in here has a real consequence. That is rare."</span><span class="proof-dot"></span>
+      <span class="proof-item">"The most honest startup education I have ever encountered."</span><span class="proof-dot"></span>
+      <span class="proof-item">"Zara made me feel like a fraud — in the absolute best way."</span><span class="proof-dot"></span>
+      <span class="proof-item">"I wish I had this before my first company. Would have saved two years."</span><span class="proof-dot"></span>
+      <span class="proof-item">"The crisis events are terrifyingly accurate to real life."</span><span class="proof-dot"></span>
+      <span class="proof-item">"This is the MBA I actually needed — and it cost nothing."</span><span class="proof-dot"></span>
+      <span class="proof-item">"The Market Simulation kept me up until 2am three nights in a row."</span><span class="proof-dot"></span>
+      <span class="proof-item">"I failed my first startup. This is exactly what I should have studied first."</span><span class="proof-dot"></span>
+      <span class="proof-item">"Better than any business book I have read. No comparison."</span><span class="proof-dot"></span>
+      <span class="proof-item">"The characters feel real. Especially Leo — I have been Leo."</span><span class="proof-dot"></span>
+      <span class="proof-item">"Every decision in here has a real consequence. That is rare."</span><span class="proof-dot"></span>
+    </div>
+  </div>
+
+  <!-- CHARACTERS -->
+  <div class="characters-section">
+    <div class="section-label">MEET YOUR GUIDES</div>
+    <div class="section-headline">Five voices. Five perspectives. All honest.</div>
+    <div class="char-grid">
+      <div class="char-card">
+        <div class="char-avatar mentor-av">M</div>
+        <div class="char-name">The Mentor</div>
+        <div class="char-role">16,000 startups observed</div>
+        <div class="char-quote">"I have watched empires built on napkins and billion-dollar ideas die in boardrooms. Listen carefully."</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar zara-av">Z</div>
+        <div class="char-name">Zara</div>
+        <div class="char-role">Partner, Apex Ventures</div>
+        <div class="char-quote">"Your unit economics do not work. Convince me otherwise — or walk away and come back when they do."</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar leo-av">L</div>
+        <div class="char-name">Leo</div>
+        <div class="char-role">First-time founder, your peer</div>
+        <div class="char-quote">"I thought passion was enough. It is not. Here is everything I learned the hard way so you do not have to."</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar maya-av">Mx</div>
+        <div class="char-name">Maya</div>
+        <div class="char-role">Brand &amp; marketing strategist</div>
+        <div class="char-quote">"Your brand is not your logo. It is what they whisper about you when you leave the room."</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar sam-av">S</div>
+        <div class="char-name">Sam</div>
+        <div class="char-role">CTO, pragmatist</div>
+        <div class="char-quote">"The code works. The business model? That is entirely your problem. But I will help you think through it."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features-section" id="features">
+    <div class="section-label">WHAT IS INSIDE</div>
+    <div class="section-headline">Everything a real founder education needs.</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-gold">S</div>
+        </div>
+        <div class="feature-title">250 Cinematic Skills</div>
+        <div class="feature-desc">Every question is a scene. Characters argue, challenge, and teach through scenarios pulled from real founder experiences — not textbooks.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-blue">M</div>
+        </div>
+        <div class="feature-title">Live Market Simulation</div>
+        <div class="feature-desc">200+ decisions that ripple through a simulated company. Watch your valuation chart react in real time. Every decision has a consequence.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-rose">C</div>
+        </div>
+        <div class="feature-title">Crisis Events</div>
+        <div class="feature-desc">Without warning, a crisis fires. You have 30 seconds. Server down at launch. Co-founder quits via text. Key customer leaves. What do you do?</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-sage">D</div>
+        </div>
+        <div class="feature-title">Business Dictionary</div>
+        <div class="feature-desc">100+ terms from CAC to convertible notes, explained in plain language with context. The vocabulary every founder needs, without the MBA debt.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-gold">Z</div>
+        </div>
+        <div class="feature-title">Zara Algorithm</div>
+        <div class="feature-desc">If your success rate climbs above 70%, Zara gets harder. More skeptical. More demanding. Because if it feels easy, you are not learning.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-blue">J</div>
+        </div>
+        <div class="feature-title">Founder Journal</div>
+        <div class="feature-desc">Save any lesson to your personal journal. Review it. Build your own founder's handbook. What you write down is what you actually keep.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-rose">B</div>
+        </div>
+        <div class="feature-title">Achievement Badges</div>
+        <div class="feature-desc">30+ badges for real milestones — not participation trophies. Earn them by making good decisions, surviving crises, and persisting through failure.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">
+          <div class="feature-icon f-sage">L</div>
+        </div>
+        <div class="feature-title">Mentor Letters</div>
+        <div class="feature-desc">Complete a stage and receive a personal letter from The Mentor. Handwritten reflections on what you have built and what lies ahead on the journey.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGES PREVIEW -->
+  <div class="stages-preview-section" id="stages">
+    <div class="section-label">THE JOURNEY</div>
+    <div class="section-headline">10 stages from zero to legacy.</div>
+    <div class="stages-preview-grid">
+      <div class="sp-card sp-1"><span class="sp-num">01</span><span class="sp-name">The Spark</span><span class="sp-tag">Find your why</span></div>
+      <div class="sp-card sp-2"><span class="sp-num">02</span><span class="sp-name">The Customer</span><span class="sp-tag">Know who you serve</span></div>
+      <div class="sp-card sp-3"><span class="sp-num">03</span><span class="sp-name">The Market</span><span class="sp-tag">Size it. Own it.</span></div>
+      <div class="sp-card sp-4"><span class="sp-num">04</span><span class="sp-name">The Product</span><span class="sp-tag">Ship ugly. Learn fast.</span></div>
+      <div class="sp-card sp-5"><span class="sp-num">05</span><span class="sp-name">The Pitch</span><span class="sp-tag">Sell the story</span></div>
+      <div class="sp-card sp-6"><span class="sp-num">06</span><span class="sp-name">The Team</span><span class="sp-tag">Build right or alone</span></div>
+      <div class="sp-card sp-7"><span class="sp-num">07</span><span class="sp-name">The Numbers</span><span class="sp-tag">Learn the scoreboard</span></div>
+      <div class="sp-card sp-8"><span class="sp-num">08</span><span class="sp-name">The Growth</span><span class="sp-tag">Scale what works</span></div>
+      <div class="sp-card sp-9"><span class="sp-num">09</span><span class="sp-name">The Crisis</span><span class="sp-tag">Hit the wall. Survive.</span></div>
+      <div class="sp-card sp-10"><span class="sp-num">10</span><span class="sp-name">The Legacy</span><span class="sp-tag">Leave something real</span></div>
+    </div>
+  </div>
+
+  <!-- DICTIONARY PREVIEW -->
+  <div class="dict-preview-section" id="dictionary-preview">
+    <div class="section-label">BUSINESS DICTIONARY</div>
+    <div class="section-headline">100+ terms. No MBA required.</div>
+    <div class="dict-sample-grid">
+      <div class="dict-sample-card"><div class="ds-term">CAC</div><div class="ds-def">Customer Acquisition Cost — how much it costs to acquire one paying customer through all marketing and sales spend.</div></div>
+      <div class="dict-sample-card"><div class="ds-term">PMF</div><div class="ds-def">Product-Market Fit — the moment your product genuinely satisfies a specific market demand at scale.</div></div>
+      <div class="dict-sample-card"><div class="ds-term">Runway</div><div class="ds-def">How many months your company can operate before running out of cash at the current burn rate.</div></div>
+      <div class="dict-sample-card"><div class="ds-term">Term Sheet</div><div class="ds-def">A non-binding agreement outlining the key terms of an investment deal before legal documentation.</div></div>
+      <div class="dict-sample-card"><div class="ds-term">Burn Rate</div><div class="ds-def">The rate at which a company spends its cash reserves. Monthly burn = money out minus money in.</div></div>
+      <div class="dict-sample-card"><div class="ds-term">Dilution</div><div class="ds-def">The reduction in existing shareholders' ownership percentage when new shares are issued in a funding round.</div></div>
+    </div>
+    <button class="dict-explore-btn" id="dictPreviewBtn">Explore Full Dictionary &#8594;</button>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section">
+    <div class="section-label">HOW IT WORKS</div>
+    <div class="section-headline">A curriculum designed around decisions, not lectures.</div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Enter the Scene</div>
+        <div class="step-desc">Each skill drops you into a cinematic moment — a boardroom standoff, a 2am product crisis, a pitch gone sideways. Feel the pressure.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">Make the Call</div>
+        <div class="step-desc">Four choices. One is right. The rest teach you something harder. Correct answers are randomized — you cannot just pick the first option and win.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">See the Tree</div>
+        <div class="step-desc">After each answer, see an animated decision tree showing where every path leads. Understand the full cost of each choice you did not make.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-title">Watch the Market React</div>
+        <div class="step-desc">Your decisions ripple through a simulated market. Live valuation graphs. Real consequences. No going back on a bad pivot.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">05</div>
+        <div class="step-title">Survive the Crisis</div>
+        <div class="step-desc">Random crises fire without warning. You have 30 seconds. What you do defines your company culture more than any strategy session ever could.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">06</div>
+        <div class="step-title">Build Your Legacy</div>
+        <div class="step-desc">Collect wisdom in your journal. Earn badges. Receive mentor letters. Complete all 250 skills and earn your Founder's Certificate.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- BADGES PREVIEW -->
+  <div class="badges-preview-section">
+    <div class="section-label">ACHIEVEMENTS</div>
+    <div class="section-headline">Earn what you survive.</div>
+    <div class="badges-preview-grid">
+      <div class="bp-badge"><div class="bp-icon bp-gold">FC</div><div class="bp-name">First Call</div></div>
+      <div class="bp-badge"><div class="bp-icon bp-rose">CS</div><div class="bp-name">Crisis Survivor</div></div>
+      <div class="bp-badge"><div class="bp-icon bp-blue">MM</div><div class="bp-name">Market Mogul</div></div>
+      <div class="bp-badge"><div class="bp-icon bp-sage">HS</div><div class="bp-name">Hot Streak</div></div>
+      <div class="bp-badge"><div class="bp-icon bp-blue">JR</div><div class="bp-name">The Reflector</div></div>
+      <div class="bp-badge"><div class="bp-icon bp-rose">ZA</div><div class="bp-name">Zara's Respect</div></div>
+      <div class="bp-badge locked"><div class="bp-icon bp-lock">?</div><div class="bp-name">???</div></div>
+      <div class="bp-badge locked"><div class="bp-icon bp-lock">?</div><div class="bp-name">???</div></div>
+    </div>
+    <div class="badges-hint">30+ badges to unlock. Some are secret.</div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div class="final-cta-section">
+    <div class="final-cta-inner">
+      <h2 class="final-cta-headline">Your company is waiting to be built.</h2>
+      <p class="final-cta-sub">Start with a decision. End with a legacy.</p>
+      <button class="cta-btn cta-btn-large" id="startBtnFinal">Begin the Journey &#8594;</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="landing-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <span class="footer-logo-mark">FP</span>
+          <span class="footer-logo-text">FounderPath</span>
+        </div>
+        <div class="footer-tagline">The Entrepreneur's Playground</div>
+      </div>
+      <div class="footer-right">
+        <div class="footer-copy">&copy; 2025 FounderPath. All rights reserved.</div>
+        <div class="footer-credit">Made by <a href="https://www.linkedin.com/in/mohammad-shahan-khan" target="_blank" rel="noopener" class="footer-link">Mohammad Shahan Khan</a></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div id="dashboard" class="page">
+  <div class="dashboard-header">
+    <div class="dash-logo">FounderPath</div>
+    <div class="dash-progress-area">
+      <div class="progress-label"><span id="completedCount">0</span> / <span id="totalSkillsCount">250</span> Skills</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="mainProgressBar"></div></div>
+    </div>
+    <div class="dash-right">
+      <div class="xp-badge">XP <span id="xpDisplay">0</span></div>
+      <div class="streak-badge"><span id="streakDisplay">0</span>d streak</div>
+      <button class="dash-icon-btn" id="badgesBtn" title="Badges">&#9733; Badges</button>
+      <button class="journal-btn" id="journalOpenBtn">Journal</button>
+      <button class="dict-btn" id="dictOpenBtn">Dictionary</button>
+      <button class="market-sim-btn" id="marketSimBtn">Market Sim</button>
+    </div>
+  </div>
+
+  <div class="ticker-wrap">
+    <div class="ticker-label">MARKET</div>
+    <div class="ticker-track"><div class="ticker-content" id="tickerContent"></div></div>
+  </div>
+
+
+  <div class="quote-banner">
+    <div class="quote-text" id="quoteText"></div>
+    <div class="quote-author" id="quoteAuthor"></div>
+  </div>
+
+  <div class="stages-container">
+    <div class="stages-grid" id="stagesGrid"></div>
+  </div>
+
+  <div class="dash-footer">
+    <button class="back-to-landing" id="backToLanding">Back to Home</button>
+    <div class="dash-footer-credit">Made by <a href="https://www.linkedin.com/in/mohammad-shahan-khan" target="_blank" rel="noopener" class="footer-link">Mohammad Shahan Khan</a></div>
+  </div>
+</div>
+
+<!-- ===================== STAGE DETAIL ===================== -->
+<div id="stageDetail" class="page">
+  <div class="stage-detail-header">
+    <button class="back-btn" id="backToDashboard">&#8592; Dashboard</button>
+    <div class="stage-detail-title" id="stageDetailTitle"></div>
+    <div class="stage-detail-progress" id="stageDetailProgress"></div>
+  </div>
+  <div class="skills-list" id="skillsList"></div>
+</div>
+
+<!-- ===================== SKILL MODAL ===================== -->
+<div id="skillModal" class="modal-overlay hidden">
+  <div class="skill-modal">
+    <button class="modal-close" id="modalClose">&#215;</button>
+
+    <div class="skill-header">
+      <div class="skill-meta">
+        <span class="skill-stage-tag" id="skillStageTag"></span>
+        <span class="skill-num" id="skillNum"></span>
+        <span class="cohort-stat" id="cohortStat"></span>
+      </div>
+      <div class="skill-title" id="skillTitle"></div>
+      <div class="skill-q-progress">
+        <span id="qProgressText">Question 1 of 5</span>
+        <div class="q-progress-bar"><div class="q-progress-fill" id="qProgressFill"></div></div>
+      </div>
+    </div>
+
+    <div class="scene-area" id="sceneArea">
+      <div class="concept-teaching" id="conceptTeaching"></div>
+      <div class="scene-setting" id="sceneSetting"></div>
+      <div class="dialogue-block" id="dialogueBlock"></div>
+    </div>
+
+    <div class="question-area" id="questionArea">
+      <div class="question-text" id="questionText"></div>
+      <div class="choices-grid" id="choicesGrid"></div>
+    </div>
+
+    <div class="feedback-area hidden" id="feedbackArea">
+      <div class="feedback-result" id="feedbackResult"></div>
+      <div class="feedback-text" id="feedbackText"></div>
+      <div class="lesson-box" id="lessonBox"></div>
+      <!-- DECISION TREE -->
+      <div class="dtree-section">
+        <div class="dtree-label">Decision Tree — Where Each Path Led</div>
+        <canvas class="dtree-canvas" id="dtreeCanvas" width="620" height="180"></canvas>
+      </div>
+      <div class="feedback-actions">
+        <button class="save-journal-btn" id="saveJournalBtn">Save to Journal</button>
+        <button class="next-btn" id="nextBtn">Next Question</button>
+      </div>
+    </div>
+
+    <div class="skill-complete-area hidden" id="skillCompleteArea">
+      <div class="complete-anim"></div>
+      <div class="complete-title">Skill Mastered</div>
+      <div class="complete-xp" id="completeXP"></div>
+      <div class="complete-badges-row" id="completeBadgesRow"></div>
+      <div class="complete-summary" id="completeSummary"></div>
+      <button class="complete-btn" id="completeSkillBtn">Continue Journey</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CRISIS MODAL ===================== -->
+<div id="crisisModal" class="modal-overlay hidden">
+  <div class="crisis-modal">
+    <div class="crisis-alarm">&#9888; CRISIS EVENT</div>
+    <div class="crisis-timer-wrap">
+      <svg viewBox="0 0 80 80" class="crisis-svg">
+        <circle cx="40" cy="40" r="34" class="crisis-circle-bg"/>
+        <circle cx="40" cy="40" r="34" class="crisis-circle-fill" id="crisisCircle"/>
+      </svg>
+      <div class="crisis-seconds" id="crisisSeconds">30</div>
+    </div>
+    <div class="crisis-title" id="crisisTitle"></div>
+    <div class="crisis-scenario" id="crisisScenario"></div>
+    <div class="crisis-choices" id="crisisChoices"></div>
+    <div class="crisis-result hidden" id="crisisResult"></div>
+  </div>
+</div>
+
+<!-- ===================== JOURNAL MODAL ===================== -->
+<div id="journalModal" class="modal-overlay hidden">
+  <div class="journal-modal">
+    <div class="journal-header">
+      <div class="journal-title">Founder Journal</div>
+      <button class="modal-close" id="journalClose">&#215;</button>
+    </div>
+    <div class="journal-empty hidden" id="journalEmpty">
+      <p>No wisdom saved yet.<br>Complete skills and save your lessons here.</p>
+    </div>
+    <div class="journal-entries" id="journalEntries"></div>
+  </div>
+</div>
+
+<!-- ===================== BADGES MODAL ===================== -->
+<div id="badgesModal" class="modal-overlay hidden">
+  <div class="badges-modal">
+    <div class="badges-modal-header">
+      <div class="badges-modal-title">Achievement Badges</div>
+      <button class="modal-close" id="badgesClose">&#215;</button>
+    </div>
+    <div class="badges-subtitle" id="badgesSubtitle"></div>
+    <div class="badges-grid" id="badgesGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== DICTIONARY MODAL ===================== -->
+<div id="dictionaryModal" class="modal-overlay hidden">
+  <div class="dictionary-modal">
+    <div class="dict-header">
+      <div class="dict-title">Business Dictionary</div>
+      <button class="modal-close" id="dictClose">&#215;</button>
+    </div>
+    <div class="dict-search-wrap">
+      <input class="dict-search" id="dictSearch" type="text" placeholder="Search 100+ terms..." autocomplete="off" />
+      <div class="dict-count" id="dictCount"></div>
+    </div>
+    <div class="dict-categories" id="dictCategories"></div>
+    <div class="dict-list" id="dictList"></div>
+  </div>
+</div>
+
+<!-- ===================== MENTOR LETTER MODAL ===================== -->
+<div id="mentorLetterModal" class="modal-overlay hidden">
+  <div class="mentor-letter-modal">
+    <button class="modal-close" id="mentorLetterClose">&#215;</button>
+    <div class="letter-header">
+      <div class="letter-from">A letter from The Mentor</div>
+      <div class="letter-stage" id="letterStage"></div>
+    </div>
+    <div class="letter-body" id="letterBody"></div>
+    <div class="letter-sig">The Mentor</div>
+    <button class="letter-continue-btn" id="letterContinueBtn">Continue the Journey</button>
+  </div>
+</div>
+
+<!-- ===================== GLOSSARY TOOLTIP ===================== -->
+<div class="glossary-tooltip hidden" id="glossaryTooltip">
+  <div class="glossary-tooltip-term" id="gtTerm"></div>
+  <div class="glossary-tooltip-def" id="gtDef"></div>
+</div>
+
+<!-- ===================== MARKET SIMULATION ===================== -->
+<div id="marketSim" class="page">
+  <div class="market-header">
+    <button class="back-btn" id="backFromMarket">&#8592; Dashboard</button>
+    <div class="market-title">Market Simulation</div>
+    <div class="market-company-stats">
+      <div class="mstat">Valuation: $<span id="mValuation">1.0M</span></div>
+      <div class="mstat">Revenue: $<span id="mRevenue">0</span>/mo</div>
+      <div class="mstat">Runway: <span id="mRunway">12</span> mo</div>
+      <div class="mstat">Team: <span id="mEmployees">3</span></div>
+    </div>
+  </div>
+  <div class="market-body">
+    <div class="market-chart-area">
+      <div class="chart-title">Company Valuation Trajectory</div>
+      <canvas id="valuationChart" width="680" height="240"></canvas>
+      <div class="market-indicators">
+        <div class="ind-box">
+          <div class="ind-label">Market Sentiment</div>
+          <div class="ind-bar-wrap"><div class="ind-bar sentiment-bar" id="sentimentBar"></div></div>
+          <div class="ind-val" id="sentimentVal">Neutral</div>
+        </div>
+        <div class="ind-box">
+          <div class="ind-label">Investor Confidence</div>
+          <div class="ind-bar-wrap"><div class="ind-bar confidence-bar" id="confidenceBar"></div></div>
+          <div class="ind-val" id="confidenceVal">Medium</div>
+        </div>
+        <div class="ind-box">
+          <div class="ind-label">Brand Equity</div>
+          <div class="ind-bar-wrap"><div class="ind-bar brand-bar" id="brandBar"></div></div>
+          <div class="ind-val" id="brandVal">Building</div>
+        </div>
+        <div class="ind-box">
+          <div class="ind-label">Runway Health</div>
+          <div class="ind-bar-wrap"><div class="ind-bar burn-bar" id="burnBar"></div></div>
+          <div class="ind-val" id="burnVal">Healthy</div>
+        </div>
+      </div>
+    </div>
+    <div class="market-decision-area">
+      <div class="decision-top">
+        <div class="decision-round">Round <span id="decisionRound">1</span> of 20</div>
+        <div class="decision-context" id="decisionContext"></div>
+      </div>
+      <div class="decision-scenario" id="decisionScenario"></div>
+      <div class="market-char-dialogue" id="marketDialogue"></div>
+      <div class="decision-choices" id="decisionChoices"></div>
+      <div class="decision-result hidden" id="decisionResult">
+        <div class="result-impact" id="resultImpact"></div>
+        <div class="result-metrics" id="resultMetrics"></div>
+        <div class="result-detail" id="resultDetail"></div>
+        <button class="next-decision-btn" id="nextDecisionBtn">Next Round &#8594;</button>
+      </div>
+    </div>
+  </div>
+  <div class="market-log">
+    <div class="log-title">Decision Log</div>
+    <div class="log-entries" id="logEntries"></div>
+  </div>
+</div>
+
+<!-- ===================== COMPLETION ===================== -->
+<div id="completionScreen" class="page">
+  <div class="completion-content">
+    <div class="cert-frame">
+      <div class="cert-brand">
+        <span class="cert-logo-mark">FP</span> FounderPath
+      </div>
+      <div class="cert-label">FOUNDER'S CERTIFICATE</div>
+      <div class="cert-divider"></div>
+      <div class="cert-body">
+        <p>This certifies that you have completed all</p>
+        <p class="cert-big">250 Skills</p>
+        <p>across 10 stages of the entrepreneurial journey.</p>
+        <br>
+        <p>You have faced decisions, survived crises,<br>and built wisdom that no classroom could ever teach.</p>
+      </div>
+      <div class="cert-divider"></div>
+      <div class="cert-sig">FounderPath &mdash; The Entrepreneur's Playground</div>
+    </div>
+    <button class="reset-btn" id="resetBtn">Start Over</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
