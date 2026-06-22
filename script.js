@@ -633,6 +633,318 @@ function buildSkillsData() {
     return pools[Math.floor(Math.random() * pools.length)];
   };
 
+  // Concept explanations for all programmatically-generated skills
+  const CONCEPT_MAP = {
+    // Stage 3 — The Market
+    'Market Sizing Methods': 'Estimating TAM (Total Addressable Market), SAM (Serviceable Addressable Market), and SOM (Serviceable Obtainable Market) using both top-down industry data and bottom-up unit economics. The number investors care about most is your credible SOM — the realistic slice you can capture — and the logic behind how you get there.',
+    'Competitive Analysis Deep Dive': 'A structured mapping of every competitor across product capability, pricing, positioning, customer segments, and growth trajectory. The goal is not to find a gap — it is to find a gap you can defend. Most founders map obvious rivals and miss the indirect alternatives customers actually choose.',
+    'Positioning Strategy': 'The deliberate decision about which competitors you want to be compared against, and how you shape that comparison in the customer\'s mind. Positioning is not your tagline. It is the mental real estate your product occupies relative to every alternative a customer could choose.',
+    'Blue Ocean vs Red Ocean': 'Red Ocean: competing on the same value dimensions as existing players. Blue Ocean: redefining the competitive boundaries so comparison becomes difficult. Most startups begin in red oceans and must carve blue space through a combination of eliminating, reducing, raising, and creating value factors.',
+    'Market Entry Timing': 'The single most underrated startup variable. Being right about a market but wrong about timing produces the same outcome as being simply wrong. Early markets require expensive customer education; late markets require differentiation against entrenched players. Timing is not luck — it is a hypothesis you must test.',
+    'First Mover vs Fast Follower': 'First-mover advantage exists only when network effects, switching costs, or scale economies lock in customers before followers arrive. In most markets, the first mover educates customers and the fast follower converts them. Execution quality and timing beat pure arrival order.',
+    'Industry Forces Analysis': 'Michael Porter\'s Five Forces: threat of new entrants, buyer bargaining power, supplier power, threat of substitute products, and competitive rivalry intensity. Used to assess whether a market is structurally attractive or a commodity trap where profit margins are structurally suppressed.',
+    'Regulatory Environment': 'The legal, compliance, and governmental constraints that shape what you can build, how fast you can grow, and who can compete with you. Regulation creates both barriers and moats — founders who deeply understand their regulatory landscape turn constraints into competitive advantages.',
+    'Distribution Channels': 'The paths through which your product reaches customers: direct sales, self-serve, partnerships, marketplaces, or distribution networks. Channel choice determines your CAC ceiling, speed to scale, and how much margin you give away. The best product loses to the product with better distribution.',
+    'The Niche Advantage': 'Owning a small, specific segment completely before expanding. A niche gives you case studies, word-of-mouth density, and pricing power that broad-market players cannot match. You cannot win everywhere from day one. Win completely somewhere first, then expand from a position of strength.',
+    'Category Creation': 'Building a new mental category in the customer\'s mind rather than competing in an existing one. Category creators define the evaluation criteria and write the comparison playbook. It is expensive and slow — but it is the only path to permanent price leadership and market definition.',
+    'Competitive Moats': 'The structural advantages that make it difficult for competitors to displace you: network effects, switching costs, proprietary data, brand trust, and regulatory licensing. Moats are not built in a day. They are the compound interest of consistent early decisions made with long-term defensibility in mind.',
+    'Adjacent Market Expansion': 'Entering a market closely related to your core segment using existing customers, technology, or distribution as leverage. Adjacent moves succeed when the new segment shares structural similarity with your proven segment — same buyer, similar problem, shared infrastructure — and fail when that similarity is assumed rather than verified.',
+    'Market Disruption Patterns': 'Clayton Christensen\'s disruption theory: new entrants target low-end or overlooked customers with simpler, cheaper offerings, then move upmarket as quality improves. Incumbents rationally ignore them until it is too late. Understanding disruption patterns reveals where incumbents are most vulnerable.',
+    'Go-to-Market Sequencing': 'The order in which you attack customer segments, channels, and geographies. GTM sequencing determines your learning speed, burn efficiency, and whether each phase funds the next. The wrong sequence burns cash on lessons you could have learned cheaply if you had started in the right place.',
+    'The Incumbents\' Dilemma': 'Established companies face structural barriers to innovation: existing revenue streams, customer commitments, and organizational inertia create predictable blind spots. This is not weakness — it is rational optimization. Understanding the dilemma tells you exactly where and when to attack the established player.',
+    'Pricing Strategy': 'The deliberate design of how you charge for value: price levels, packaging tiers, pricing model (per seat, usage, flat-rate), and anchoring. Pricing is the highest-leverage lever in the business. A 1% improvement in pricing typically improves profit more than a 1% improvement in volume or cost.',
+    'Market Validation Methods': 'Structured experiments used to test whether a market will pay — customer interviews, landing page tests, pre-sales, letters of intent, concierge MVPs, and fake-door tests. Validation is not about proving yourself right. It is about finding out faster when you are wrong, before you have built the wrong thing.',
+    'Competitor Customer Interviews': 'Conversations with your competitors\' customers — both happy ones and churned ones — to understand what is working, what is broken, and what unmet needs remain. These are the most information-dense customer interviews a founder can run. Competitors have already done the hard work of finding customers with the problem.',
+    'The Market Map': 'A visual representation of the competitive landscape across two or three key dimensions — used to identify white space, cluster competitors, and communicate positioning to investors. A well-constructed market map makes invisible structure visible and helps investors instantly understand where you fit.',
+    'Segment Attractiveness': 'The evaluation of whether a customer segment is worth pursuing, based on size, growth rate, purchase frequency, willingness to pay, switching costs, and strategic alignment. Not all customers are equal. The most attractive segment is rarely the largest one — it is the one where your specific advantages compound fastest.',
+    'International Market Entry': 'Expanding beyond your home market requires understanding regulatory differences, localization needs, cultural purchasing behavior, local competition, and whether your unit economics hold in the new geography. Most startups enter international markets 18 months before they are ready because the demand signal is real but the operational readiness is not.',
+    'Platform vs Product Strategy': 'A product solves a specific problem. A platform creates value by enabling others to build on top of it. Platform businesses benefit from network effects and are extraordinarily difficult to replicate — but require achieving critical mass before value compounds. Most companies that claim to be platforms are products.',
+    'The Network Effect': 'The mechanism by which a product becomes more valuable as more people use it. Direct network effects: each user benefits from all others. Indirect: users benefit from a parallel group. Data network effects: usage improves the product for everyone. Network effects are the most powerful moat — and the hardest to bootstrap.',
+    'Defensible Positioning': 'Staking out a market position that is both valuable and difficult for competitors to replicate. Defensibility comes from specificity: the more precisely you serve a defined customer with a defined problem, the harder it is to displace you without building the same depth of customer understanding from scratch.',
+    // Stage 4 — The Product
+    'Defining the MVP': 'Minimum Viable Product: the smallest build that tests the riskiest assumption in your hypothesis. Not the worst version — the fastest learning. An MVP has one job: produce the specific evidence that either validates or falsifies your core assumption before you invest in building the full version.',
+    'Build vs Buy Decisions': 'The framework for deciding whether to build a capability internally, buy existing software, or partner with a provider. The right answer depends on whether the capability is core to your differentiation, how long building would take, and total cost of ownership over the product\'s lifetime.',
+    'The Product Roadmap': 'A prioritized sequence of features, improvements, and experiments — not a promise to customers, but a living hypothesis about where value will compound fastest. Roadmaps should change when customer evidence changes, not when internal opinions shift or when a stakeholder applies pressure.',
+    'Agile for Startups': 'An iterative development methodology: build small increments, ship them, measure the response, and adjust. For startups, the most critical Agile principle is not the ceremony or process. It is the cadence of learning — the speed at which customer feedback reaches the team and changes behavior.',
+    'The Feedback Loop': 'The cycle of shipping → measuring → learning → improving. The tighter the loop, the faster the product improves. Every day between shipping something and hearing what customers actually do with it is wasted learning time. Shortening the loop is the highest-leverage engineering and product discipline.',
+    'Technical Debt Trade-offs': 'The implied cost of shortcuts taken for speed. Technical debt compounds: early shortcuts become expensive constraints as the product scales. The strategic question is not whether to take on debt, but which debt is worth taking at which stage — and whether it will be repaid before it becomes structural.',
+    'Product-Market Fit Signals': 'The qualitative and quantitative evidence that your product satisfies strong market demand. Sean Ellis benchmark: 40%+ say they\'d be very disappointed if the product disappeared. You will also see it in organic word-of-mouth, declining churn, users defending you to critics, and a pull feeling rather than a push.',
+    'Shipping vs Perfecting': 'The tension between releasing something imperfect and waiting for better. The cost of delay is invisible in the moment — and real. The cost of imperfection is measurable and correctable. Reid Hoffman: if you are not embarrassed by your first version, you launched too late.',
+    'Feature Prioritization': 'The process of deciding what to build next based on customer impact, strategic alignment, technical cost, and timing. Every framework — RICE, ICE, opportunity scoring — serves the same principle: build what creates the most value per unit of effort for the customers who matter most.',
+    'User Testing Methods': 'The research techniques used to observe how real users interact with your product — usability tests, think-alouds, A/B tests, moderated sessions. User testing reveals what users actually do, which is always more honest and more useful than what they say they would do in a survey.',
+    'Design Thinking': 'A human-centered problem-solving approach: Empathize with users, Define the real problem, Ideate solutions, Prototype quickly, and Test honestly. Design thinking prevents building solutions to problems that do not exist in the form you assumed they did. The first version of your assumptions is almost always wrong.',
+    'The Aha Moment': 'The specific moment when a new user first realizes the core value of your product — the moment they understand why they should stay. Identifying your aha moment precisely and engineering the fastest possible path to it is the highest-leverage product investment in the early stage of any startup.',
+    'Onboarding Design': 'The designed experience from first contact to first value — the sequence of steps that helps a new user reach their aha moment before they give up and leave. Onboarding is the most important product surface nobody sees in demos. Most churn is decided in the first 72 hours.',
+    'API Strategy': 'The decisions about how your product exposes its functionality to developers and third-party integrations. An API strategy determines whether your product becomes a platform, whether you attract developer ecosystems, and whether you can be embedded in workflows you did not design.',
+    'Mobile-First Architecture': 'Designing and building for mobile constraints before desktop enhancement. Mobile-first forces clarity about core functionality and removes feature bloat. It also reflects where most users actually are — for most consumer products, the mobile experience is the primary, defining one.',
+    'Data Model Design': 'The foundational decisions about how information is structured, stored, and related in your product. Poor data model decisions compound: they become expensive to change as the product scales, and they constrain what features you can build without painful, expensive rework.',
+    'The Build-Measure-Learn Cycle': 'Eric Ries\'s core Lean Startup loop: Build the smallest testable version, Measure what users actually do, Learn what the data means, decide whether to persist or pivot. The cycle is not about speed. It is about honesty — the willingness to measure honestly and act on uncomfortable truth.',
+    'Version 1 Lessons': 'What the first real version reveals that no planning could have shown you. Version 1 lessons come from real users making unexpected choices, features nobody uses, workflows you did not anticipate, and complaints that arrive in the first 72 hours. Each one is worth more than a month of pre-launch speculation.',
+    'Product Metrics That Matter': 'The small number of metrics that actually signal product health versus the long list of vanity metrics that look good in a deck. D7 and D30 retention, engagement depth, time-to-first-value, and NPS are real signals. Total signups and page views rarely predict whether your product survives.',
+    'The Platform Decision': 'The strategic choice to build a platform — enabling others to create value on top of your product — versus a point solution that solves one problem completely. This decision shapes hiring, architecture, business model, and competitive dynamics for years. Most companies that call themselves platforms are products.',
+    'Developer Experience': 'The quality of the experience developers have when building with your product, API, or SDK — documentation quality, onboarding friction, error clarity, and community support. Developer experience is a product discipline. Poor DX kills developer adoption regardless of how technically excellent the underlying system is.',
+    'Security from Day One': 'Building security into the product architecture from the start rather than adding it as a compliance layer after a breach. Security debt compounds faster than technical debt because its cost is not paid internally — it is paid by customers, in trust and data. Retrofitting security is 5x more expensive than building it in.',
+    'The 10x Engineer': 'The empirical observation that in complex knowledge work, top-decile performers often produce 5-10x the output of median performers — not by working more hours, but through better judgment, pattern recognition, and prioritization. Hiring one exceptional engineer often beats hiring three average ones.',
+    'Documentation Culture': 'The organizational practice of writing down decisions, processes, and knowledge — making implicit knowledge explicit and durable. Documentation compounds: it accelerates onboarding, reduces single-point-of-failure risk, and enables scale. Teams that document well grow without losing institutional knowledge.',
+    'Scaling Technical Infrastructure': 'The engineering decisions required to grow a product from hundreds to millions of users without breaking. Scalability is not just a performance problem — it is an architectural, organizational, and process problem that requires fundamentally different thinking at each order of magnitude of growth.',
+    // Stage 5 — The Pitch
+    'The Investor Pitch Structure': 'The standard arc of a compelling investor pitch: Problem, Solution, Market Size, Business Model, Traction, Team, and Ask. Each slide serves one job. The structure exists not because investors demand it, but because it maps to the questions every investor needs answered before they can say yes.',
+    'The Problem Slide': 'The most important slide in any deck — the one that makes an investor feel the pain your customer experiences. A strong problem slide names the specific customer, quantifies the current pain, and reveals why existing solutions fall short. Without a felt problem, no solution matters.',
+    'The Solution Slide': 'The slide that shows how your product specifically addresses the pain you just made the investor feel. The best solution slides are simple, visual, and demonstrate the insight that makes your approach work when others have failed. Resist the urge to explain every feature.',
+    'Market Size Slides': 'The slides that establish whether the opportunity is worth pursuing at venture scale. TAM, SAM, and SOM — but presented credibly, not aspirationally. The most common mistake is presenting an enormous TAM without a credible path to capturing a meaningful SOM.',
+    'Business Model Clarity': 'The ability to explain in one sentence how your company makes money, and in two more how that model scales. Investors reject more pitches for business model confusion than for bad products. If you cannot explain the economics clearly, it signals you have not deeply thought them through.',
+    'Team Slide Psychology': 'The slide that answers the most important question investors ask privately: "Why is this team uniquely positioned to win this market?" Founder-market fit, relevant experience, and evidence of execution matter more than impressive titles. Investors bet on teams, not just ideas.',
+    'The Ask and Use of Funds': 'The closing section that specifies how much you are raising, what it buys in terms of milestones, and what the resulting runway enables. Vague asks signal unclear priorities. A specific ask with specific milestones signals a founder who has thought rigorously about the path ahead.',
+    'Handling Objections': 'The art of responding to investor challenges with intellectual honesty and preparation. The best founders absorb objections rather than deflect them, address them with data rather than rhetoric, and use them to demonstrate how deeply they have thought about their own risks.',
+    'Demo Day Performance': 'The compressed pitch format — 3-7 minutes to convey a compelling story to many investors simultaneously. Demo day success is a function of clarity, confidence, and one memorable hook that makes investors want to follow up. Every word must earn its place.',
+    'Storytelling with Data': 'The skill of using numbers to make emotional points rather than just informational ones. Data storytelling converts metrics into narrative: not "we grew 40% month-over-month" but "every month, 40% more founders found us without us spending a dollar on ads — here is why."',
+    'The Hook': 'The opening of a pitch or email that makes an investor lean forward. A great hook is specific, surprising, or counterintuitive — it violates an expectation or reveals an insight most people have missed. The hook does not sell the company; it earns the next 60 seconds of attention.',
+    'Warm Introductions': 'The mechanism by which most fundable pitches begin — a mutual contact who can vouch for the founder\'s credibility with a specific investor. Warm introductions dramatically increase response rates and set a collaborative frame before the pitch begins. Most deals start with a warm intro.',
+    'AngelList and Syndicates': 'AngelList is a platform for startup fundraising and angel investing. Syndicates allow individual angel investors to pool capital behind a deal led by a trusted lead investor. For founders, syndicates provide access to many investors through one relationship rather than hundreds of individual conversations.',
+    'The Second Meeting': 'The follow-up conversation after an investor shows initial interest — and the point where most deals either advance or stall. Second meetings are won by demonstrating progress on the specific concerns raised in the first, and by asking the question "What would need to be true for you to invest?"',
+    'Term Sheet Navigation': 'The process of understanding, evaluating, and negotiating the key terms of an investment offer: valuation, dilution, governance rights, liquidation preferences, and protective provisions. Most founders focus on valuation. Experienced founders focus on the terms that govern control and exit economics.',
+    'Elevator Pitch Formula': 'A 30-60 second verbal summary of your company that conveys who the customer is, what problem they have, what your solution does, and why you are the right team to deliver it — without jargon or unnecessary context. The elevator pitch is not for closing deals; it is for earning the next conversation.',
+    'The Vision Narrative': 'The long-form story of why your company will matter in 10 years — the world as it will exist if you succeed. A compelling vision narrative is not a feature roadmap; it is a compelling description of the future that makes investors want to live in that world and back the people building it.',
+    'Pitch Deck Design Principles': 'The visual and structural standards that make a pitch deck clear, professional, and memorable. One idea per slide. Minimal text. Data visualized, not tabulated. Consistent brand identity. The deck is not the pitch — it is the structure that holds the pitch while you are not in the room.',
+    'Non-Dilutive Funding': 'Capital that does not require giving up equity — grants, revenue-based financing, government programs, loans, and competitions. Non-dilutive funding is often overlooked by startups focused on VC. For the right business at the right stage, it is the highest-ROI capital available.',
+    'Grant Strategy': 'The systematic pursuit of government, foundation, and corporate grants as a funding source — particularly for startups in healthcare, climate, defense, research, or social impact. Grants require patience and paperwork but provide capital with no dilution and often carry credibility that unlocks other funding.',
+    'Customer as Proof': 'Using actual customer stories, logos, usage data, and quotes as the most credible form of evidence in any pitch. Nothing a founder says about their own product is as persuasive as what a customer says about the value they have received. Real proof is worth more than any claim.',
+    'Video Pitches': 'The asynchronous video format used for cold investor outreach or virtual pitch competitions — a 3-5 minute presentation designed to create enough interest for a live conversation. Video pitches must work in silent mode, in the first 30 seconds, and on mobile.',
+    'The Cold Email to Investors': 'An unsolicited outreach to an investor you do not have a warm introduction to. Cold emails require a subject line that earns the open, a first sentence that earns the second, and a clear, specific ask. The best cold emails are short, specific about the investor\'s interest, and include one piece of proof.',
+    'Conference Networking': 'The strategic use of industry events, startup conferences, and investor summits to build relationships before you need them. Conference networking is most effective when you arrive with a specific list of people you want to meet, a clear reason for each meeting, and a follow-up system.',
+    'The Follow-Up Strategy': 'The sequence of actions taken after a pitch or initial meeting to maintain investor interest and demonstrate momentum without being annoying. The best follow-ups add new information — a new customer, a metric that moved, a question answered — rather than simply checking in.',
+    // Stage 6 — The Team
+    'First Hire Decision': 'The choice of who to bring into the company first — a decision that shapes culture, working style, and team DNA permanently. The first hire sets expectations about quality, pace, and values. A great first hire makes every subsequent hire easier. A bad first hire makes everything harder.',
+    'The Founding Team Dynamic': 'The working relationship between co-founders: how decisions get made, how conflict gets resolved, how equity is shared, and how roles evolve as the company grows. Co-founder dynamics are the most underrated factor in startup success — and co-founder conflict is one of the top causes of failure.',
+    'Hiring for Culture': 'The practice of assessing whether a candidate will reinforce or erode the values and working norms you are intentionally building. Culture fit is not about similarity — it is about whether a person will thrive in and contribute to the specific environment your company needs to succeed.',
+    'Compensation Design': 'The structure of how you pay people: salary levels, equity allocation, bonus design, and benefit packages. Compensation design communicates what you value, determines who you can attract, and sets expectations that are very hard to reset later. Get this wrong early and you will pay for it at scale.',
+    'Equity Philosophy': 'The principles that guide how you distribute equity across founders, early employees, advisors, and future hires. Equity philosophy determines who feels like an owner and who feels like an employee — and that distinction shapes how hard people fight for the company when things get difficult.',
+    'Remote Team Management': 'The practices, tools, and cultural norms that enable distributed teams to collaborate effectively — asynchronous communication standards, documentation habits, overlap hours, and explicit check-in structures. Remote management failures are almost always process failures, not location failures.',
+    'The 90-Day Onboarding': 'The structured program that helps a new hire become productive and culturally integrated in their first three months. The 90-day plan defines what success looks like at 30, 60, and 90 days — making performance evaluation objective and helping the new hire know they are on track.',
+    'Performance Frameworks': 'The systems used to evaluate, develop, and reward individual performance: goals and key results (OKRs), quarterly reviews, structured feedback cycles, and promotion criteria. Without explicit frameworks, performance evaluation becomes subjective — which is expensive both legally and culturally.',
+    'Difficult Conversations': 'The practice of addressing underperformance, misalignment, or interpersonal friction directly and honestly. Difficult conversations delayed always become more difficult. The founders who build great cultures are not the ones who avoid hard conversations — they are the ones who have them early and clearly.',
+    'Building Psychological Safety': 'Creating an environment where team members feel safe to speak up, disagree, admit mistakes, and take risks without fear of punishment. Google\'s Project Aristotle found psychological safety to be the single most important factor in high-performing teams — more important than individual talent.',
+    'Delegation and Trust': 'The practice of transferring decision-making authority to team members — moving from doing to enabling. Delegation requires clear expectations, appropriate authority, and genuine trust. Founders who cannot delegate become the bottleneck that prevents the company from scaling beyond their personal capacity.',
+    'Conflict Resolution': 'The structured approach to addressing disagreement between team members in ways that strengthen rather than damage relationships and culture. Conflict that is avoided becomes resentment. Conflict that is addressed with clear principles becomes stronger understanding. Not all conflict is bad — unaddressed conflict always is.',
+    'The Management Layer': 'The middle managers and team leads who translate company strategy into team execution. The management layer becomes necessary when the founding team can no longer maintain direct relationships with everyone. Building it too early creates bureaucracy. Building it too late creates chaos.',
+    'Advisor Relationships': 'The structured relationships with experienced domain experts who provide guidance, introductions, and credibility in exchange for small equity grants. Advisors are most valuable when they have specific, relevant experience — and least valuable when they are prestigious names without time or engagement.',
+    'Board Management': 'The discipline of preparing for, running, and following up on board meetings in ways that make the board a genuine asset rather than a governance obligation. The best boards are informed before meetings, focused on strategy during them, and engaged between them through regular updates.',
+    'Diversity in Teams': 'The intentional practice of building teams with diverse backgrounds, perspectives, experiences, and cognitive styles. Beyond the ethical case, diverse founding teams demonstrably produce more innovative solutions by accessing wider problem-solving approaches. Diversity requires intentional process, not just intention.',
+    'Hiring Senior Leadership': 'Bringing in experienced executives who have managed larger organizations than your current stage — a transition that requires clarity about what authority they have, what culture they are inheriting, and what success looks like in their first 90 days. The wrong senior hire can damage culture faster than three wrong junior hires.',
+    'HR Compliance Basics': 'The legal employment requirements that apply to startups: classification of workers (employee vs contractor), required benefits, anti-discrimination policies, proper documentation, and termination procedures. HR compliance mistakes are survivable early and fatal late — and always more expensive to fix than to prevent.',
+    'Team Communication Tools': 'The platforms and protocols used for internal communication: Slack for real-time, email for external, Notion or Confluence for documentation, Zoom for video. Tool choice matters less than the norms around how they are used. Mixed protocols in the same tool produce the worst of all worlds.',
+    'The All-Hands Meeting': 'The company-wide gathering — weekly, monthly, or quarterly — where leadership shares strategy, celebrates wins, acknowledges challenges, and answers questions. All-hands meetings are the primary mechanism for maintaining cultural alignment as the team grows past the point of direct individual relationships.',
+    'Recognition and Motivation': 'The practices used to acknowledge individual and team achievement in ways that reinforce the behaviors you want to see more of. Recognition is most powerful when it is specific, timely, and tied to the values you are explicitly building. Vague or delayed recognition has minimal impact.',
+    'The Engineering Manager': 'The role between individual contributors and executive leadership in an engineering organization — responsible for team performance, technical direction, recruiting, and cross-functional communication. The best engineering managers enable engineers to do their best work rather than doing engineering themselves.',
+    'The First GTM Hire': 'The first person responsible for generating revenue — often a head of sales, growth marketer, or customer success lead. The first GTM hire shapes your commercial culture permanently. Hiring too early (before you have a repeatable motion) wastes their talent. Hiring too late constrains your growth.',
+    'Offboarding Well': 'The structured process of separating from an employee or contractor in a way that is legally sound, culturally respectful, and information-preserving. Poor offboarding creates legal risk, damages team morale, and loses institutional knowledge that can take months to reconstruct.',
+    'The Team Narrative': 'The story you tell about your team — to candidates, investors, customers, and partners — that conveys why this specific group of people is uniquely equipped to win this specific market. The team narrative is not a resume summary. It is a compelling argument for why the team has unfair advantages.',
+    // Stage 7 — The Numbers
+    'Reading Financial Statements': 'The ability to interpret the three core financial statements: Income Statement (revenue and expenses over a period), Balance Sheet (assets, liabilities, equity at a point in time), and Cash Flow Statement (actual cash movement). Together they tell the complete story of financial health that no single statement can tell alone.',
+    'Cash Flow Management': 'The active management of the timing and amount of cash inflows and outflows to ensure the company can meet its obligations. Profitable companies can fail from poor cash flow management. Cash is not the same as revenue, and the gap between them — often disguised by accrual accounting — is where startups die.',
+    'Runway Modeling': 'The calculation of how many months the company can operate before running out of cash, modeled under multiple scenarios of spending and revenue. Runway modeling forces explicit assumptions about growth, hiring, and burn — and reveals which assumptions carry the most risk.',
+    'Burn Rate Optimization': 'The systematic reduction of monthly cash consumption without proportionally reducing output or speed. The goal is not to spend as little as possible — it is to maximize the ratio of progress to capital consumed. Every dollar saved extends runway; every dollar of runway is worth more as the company proves itself.',
+    'Revenue Recognition': 'The accounting rules that determine when revenue is recorded — typically when it is earned, not when cash is received. For SaaS businesses, annual contracts paid upfront are recognized monthly over the contract period, not at signing. Revenue recognition clarity prevents self-deception about financial health.',
+    'COGS Structure': 'Cost of Goods Sold: the direct costs of delivering your product or service — cloud infrastructure, payment processing, support labor, licensing fees. COGS determines gross margin, which determines how scalable and capital-efficient your business model is. High COGS disguised as operating expenses is a common early mistake.',
+    'SaaS Metrics Deep Dive': 'The specific metrics that define SaaS business health: ARR, MRR, NRR (Net Revenue Retention), Gross Revenue Retention, CAC Payback Period, LTV:CAC ratio, Quick Ratio, Magic Number, and Rule of 40. Each metric reveals a different dimension of whether the business compounds or leaks.',
+    'Forecasting Methodology': 'The systematic process of projecting future revenue, expenses, and cash flows using assumptions about growth drivers, conversion rates, and market dynamics. A good forecast is not a prediction — it is a structured way of making assumptions explicit so you can track which ones were right and which need revision.',
+    'The Financial Model': 'A spreadsheet or tool that projects the company\'s financial performance under various scenarios — a tool for decision-making, not just reporting. A good financial model is simple enough to be understood, detailed enough to be useful, and honest enough to be trusted by the people who use it.',
+    'Investor Reporting': 'The regular communication of financial and operational performance to investors — typically monthly updates with metrics, narrative context, and forward-looking commentary. The investors who hear from founders consistently provide more value and are more likely to lead follow-on rounds when the time comes.',
+    'Unit Economics Optimization': 'The ongoing improvement of the ratio of revenue to cost at the level of a single customer — LTV relative to CAC. Unit economics optimization is not a one-time exercise. It is a continuous practice of testing what improves the ratio on both the revenue and cost side.',
+    'Pricing Experiments': 'The structured testing of different price points, packaging options, and pricing models to discover what combination maximizes revenue without disproportionately increasing churn. Most startups are underpriced, and pricing experiments are the highest-ROI test a startup can run.',
+    'Revenue Diversification': 'The strategic addition of revenue streams beyond the core product — professional services, marketplace fees, data licensing, or adjacent products — to reduce concentration risk and improve predictability. Diversification that dilutes focus is dangerous. Diversification that serves the same customer deeply is valuable.',
+    'The Break-Even Analysis': 'The calculation of the revenue level at which total costs equal total revenue — the point where the company stops losing money on operations. Break-even analysis reveals how much revenue growth is required to achieve profitability and how sensitive that target is to cost structure changes.',
+    'Working Capital Management': 'The management of the short-term assets and liabilities that fund daily operations — accounts receivable, accounts payable, inventory, and short-term debt. Working capital problems — often invisible in a P&L — are one of the most common causes of cash crises in otherwise healthy businesses.',
+    'Tax Strategy for Startups': 'The planning practices that minimize tax liability while remaining compliant — R&D credits, state tax nexus management, entity structure optimization, equity compensation planning, and timing of deductions. Early tax decisions compound. Getting them wrong is expensive; getting them right is a competitive advantage.',
+    'Equity Financing vs Debt': 'The choice between selling ownership (equity) and borrowing money (debt) as financing mechanisms. Equity requires no repayment but dilutes ownership and creates investor governance rights. Debt must be repaid with interest but preserves ownership and control. The right choice depends on stage, cash flow predictability, and risk tolerance.',
+    'Cap Table Management': 'The ongoing maintenance of the capitalization table — the record of all ownership stakes, vesting schedules, option grants, and convertible instruments. A clean cap table is an asset. A messy cap table — with too many small holders, unclear vesting terms, or unresolved instruments — is a fundraising liability.',
+    'Board Financial Reporting': 'The preparation and presentation of financial information to the board of directors — the package that frames the company\'s performance, highlights risks, and supports strategic decisions. Board reporting is not just accounting. It is leadership communication about the true state of the business.',
+    'Accounts Receivable': 'The money owed to the company by customers for products or services delivered but not yet paid for. Accounts receivable management determines how quickly invoices convert to cash. Slow-paying customers can create a cash crisis even when revenue is strong — a critical distinction for founders who read only the income statement.',
+    'Vendor Negotiation': 'The process of securing favorable terms from suppliers, service providers, and software vendors — including pricing, payment terms, volume discounts, and SLAs. Vendor negotiation is a direct lever on COGS and operating expenses. Early startups often accept default terms; sophisticated founders negotiate everything.',
+    'Cost Structure Analysis': 'The systematic examination of all expenses — fixed, variable, and semi-variable — to understand what drives cost growth, where inefficiencies exist, and which costs are truly necessary at the current stage. Cost structure analysis reveals where the company is funding complexity rather than capacity.',
+    'The Finance Hire': 'The decision of when and whom to bring in as the first dedicated finance professional — typically a Controller, CFO, or VP Finance. Hiring too early adds cost without value. Hiring too late creates financial risk as complexity grows. The trigger is usually a fundraise, an audit requirement, or a board demand for rigor.',
+    'Accounting Systems': 'The software and processes used to record, classify, and report financial transactions — QuickBooks, Xero, NetSuite for accounting; Stripe for billing; Brex or Ramp for expenses. System choices made early constrain what is possible later. The time to choose the right system is before the data becomes complex.',
+    'Financial Due Diligence': 'The process by which investors verify the financial claims made in a pitch — examining revenue quality, customer contracts, expense documentation, cap table accuracy, and accounting policies. Founders who prepare for due diligence before they raise close rounds faster with fewer surprises.',
+    // Stage 8 — The Growth
+    'The Growth Model': 'The explicit theory of how your company acquires, retains, and expands customers — paid acquisition, virality, content, or sales-led. A growth model is not a wish list of channels. It is a testable hypothesis about the primary mechanism by which customers find and stay with your product.',
+    'Paid Acquisition Strategy': 'The deliberate use of paid advertising — search, social, display, podcast, or sponsored content — to acquire customers at a predictable cost. Paid acquisition is powerful when CAC payback is short enough to justify the outlay. Without that, scaling paid acquisition scales losses, not growth.',
+    'Content as a Growth Channel': 'The use of written, video, audio, or visual content to attract customers organically — building an audience that converts to customers over time. Content compounds: early investments continue generating traffic and trust for years. The downside is that it is slow. The upside is that it is durable and defensible.',
+    'SEO for Startups': 'The practice of optimizing your online presence so potential customers find you through search — through keyword strategy, content quality, technical optimization, and backlink development. SEO is a long-game investment that pays compounding dividends. The right time to start is 12 months before you need the traffic.',
+    'Email Marketing Systems': 'The infrastructure and strategy for using email to acquire, engage, and retain customers — segmentation, automation sequences, behavioral triggers, and deliverability management. Email remains the highest-ROI marketing channel for most B2B and consumer businesses when executed with relevance and discipline.',
+    'Referral Program Design': 'The structured incentive system that encourages existing customers to refer new ones — in exchange for credits, discounts, cash, or status. Referral programs work when customers have already had an aha moment and the incentive is meaningful. They fail when the product is not yet good enough for customers to risk their reputation.',
+    'Community-Led Growth': 'Building a community of users, advocates, or practitioners around your product that generates organic growth through shared knowledge, peer support, and network effects. Community-led growth is slow to build and nearly impossible to replicate once established — making it one of the most defensible growth moats.',
+    'International Expansion': 'The strategic and operational decision to enter new geographic markets — involving localization, regulatory compliance, local hiring, currency management, and cultural adaptation. International expansion typically requires more resources and time than founders expect, and delivers returns later than projections assume.',
+    'Channel Partner Strategy': 'The use of third-party organizations — resellers, system integrators, referral partners, or distributors — to reach customers you cannot efficiently reach directly. Channel partners trade margin for reach and speed. The risks are loss of control over customer experience and dependence on partners\' motivation to sell your product.',
+    'The Sales Process': 'The repeatable sequence of steps from first contact to closed deal — prospecting, qualification, discovery, demonstration, proposal, objection handling, and close. A documented sales process is the difference between a founder who sells and a company that can sell without the founder.',
+    'CRM Implementation': 'The deployment and adoption of a Customer Relationship Management system to track leads, manage pipeline, and coordinate customer communications — Salesforce, HubSpot, Pipedrive. The system is only as valuable as the data entered. Most CRM failures are adoption failures, not software failures.',
+    'Marketing Attribution': 'The practice of assigning credit for customer conversions to the marketing touchpoints that influenced the decision — first-touch, last-touch, or multi-touch attribution. Attribution determines which channels receive budget. Attribution models are all imperfect; the goal is to be consistently wrong in a way that still improves decisions.',
+    'Conversion Rate Optimization': 'The systematic improvement of the percentage of visitors, trials, or leads that convert to the next stage of the funnel — through testing, user research, and iterative design. CRO compounds: a 20% improvement in conversion at each stage of a three-stage funnel produces a 73% improvement in overall output.',
+    'Growth Experiments': 'The structured tests run to validate growth hypotheses — A/B tests, channel experiments, pricing tests, and onboarding variants. Growth experiments should have clear hypotheses, measurable outcomes, statistical rigor, and a pre-committed decision rule about what the result means.',
+    'The Growth Team': 'The cross-functional group responsible for designing and running systematic experiments to improve acquisition, activation, retention, and referral — typically composed of product managers, engineers, designers, and data analysts. Growth teams work most effectively when they have direct ownership over metrics, not just recommendations.',
+    'Brand Building at Scale': 'The intentional investment in awareness, reputation, and emotional association with your company at a scale where individual relationships no longer suffice. Brand becomes increasingly important as markets become more crowded and as the company moves upmarket. Brand is the only asset that appreciates while your competitors spend.',
+    'PR and Media Relations': 'The practice of earning editorial coverage in publications, podcasts, and media your customers trust — building credibility and awareness that paid advertising cannot replicate. PR requires relationships, timing, genuine newsworthiness, and patience. The best PR is earned, not placed.',
+    'Podcast and Audio Strategy': 'The use of podcast appearances, sponsored content, or owned shows as a channel for reaching target audiences with longer-form, trust-building content. Audio is consumed during activities where text cannot compete — commutes, workouts, cooking — giving it unique access to your audience\'s attention.',
+    'Event Marketing': 'The use of conferences, workshops, webinars, roundtables, and proprietary events to build relationships and generate pipeline with high-value prospects. Events create conversational context that digital channels cannot replicate. The measure of event ROI is pipeline generated, not badges scanned.',
+    'Analyst Relations': 'The practice of building relationships with industry analysts — Gartner, Forrester, IDC — who influence enterprise purchasing decisions through research reports, magic quadrants, and briefings. For enterprise software companies, analyst relations can determine whether you appear in shortlists before you have a dedicated enterprise sales team.',
+    'The Renewal Engine': 'The systems, processes, and team responsible for ensuring existing customers renew their contracts at the end of each term. A strong renewal engine is the foundation of Net Revenue Retention. Renewals that are not actively managed leak predictably — customers who feel neglected find alternatives.',
+    'Expansion Revenue Strategy': 'The deliberate design of product packaging, usage tiers, and account management practices that enable existing customers to generate more revenue over time — through upsells, cross-sells, seat expansion, and usage growth. Expansion revenue is the most capital-efficient growth available to a SaaS company.',
+    'Account-Based Marketing': 'A B2B strategy that focuses marketing and sales resources on a defined list of high-value target accounts, personalizing outreach to match the specific context and needs of each account. ABM inverts the traditional funnel: instead of casting wide and filtering, you identify ideal accounts first and build campaigns to them.',
+    'Customer Success as Growth': 'The practice of ensuring customers achieve their desired outcomes from your product — and designing customer success as a proactive growth function rather than a reactive support function. Customer success generates expansion revenue, reduces churn, and creates the advocates who make sales easier.',
+    'Viral Loops': 'The mechanisms by which product usage generates more product usage — a feature or experience that naturally causes users to invite others or expose the product to new audiences. Viral loops are most powerful when product usage is inherently social and when the value to invitees is immediate and clear.',
+    // Stage 9 — The Crisis
+    'The Founder Crisis': 'The moment when the company\'s survival feels genuinely in doubt — caused by cash, team, product, or market failure — and the founder must make decisions under maximum uncertainty with no guarantee of outcome. Every significant company has faced a version of this. The founder\'s response defines what the company becomes.',
+    'Cash Crisis Management': 'The specific actions taken when the company is running out of money faster than expected — emergency cost reduction, accelerated revenue collection, bridge financing conversations, and hard prioritization of what survives the constraint. Cash crises reward founders who have maintained investor relationships before they need them.',
+    'Team Crisis — Key Person Leaves': 'The sudden departure of a critical team member — co-founder, senior engineer, or key salesperson — at a moment that threatens continuity. The immediate priority is stabilization and honest communication. The second priority is assessment: is the departure a symptom of a broader problem, or an isolated event?',
+    'Product Crisis — Major Bug': 'A critical defect that causes data loss, security exposure, or complete service failure for customers. Product crises test your incident response process, your customer communication instincts, and your team\'s ability to work under pressure. How you handle the crisis is remembered longer than the crisis itself.',
+    'Legal Crisis — IP Dispute': 'A claim that your product infringes on a third party\'s intellectual property — patent, trademark, copyright, or trade secret. Legal crises require immediate legal counsel, internal fact-finding, and communication management. The worst outcomes occur when founders delay engaging counsel or misrepresent facts to investors.',
+    'Competitive Crisis — Clone Attack': 'A well-funded competitor copies your core product and enters the market aggressively. The initial response is almost always wrong — reactive discounting, feature copying, or public attacks. The right response is to double down on what makes you different in the dimensions that matter most to your core customer.',
+    'PR Crisis — Negative Viral Story': 'A damaging narrative about your company spreading publicly — on social media, in press, or through customer complaints going viral. PR crises follow a predictable arc: initial shock, spread, peak, and decline. The speed and quality of your response determines where on that arc the damage stops.',
+    'Investor Crisis — Term Sheet Pulled': 'An investor withdraws a committed term sheet — often due to market conditions, diligence findings, or a change in fund strategy. The psychological blow is significant. The operational response is to immediately assess true runway, communicate calmly with existing investors, and run a parallel fundraising process.',
+    'Customer Crisis — Largest Account Churns': 'The loss of your biggest customer at a moment when it materially changes your revenue picture. The immediate priority is understanding why — was it product, relationship, price, or competitive? The second priority is ensuring the loss does not become a pattern. One departure is a data point; two is a signal.',
+    'Operational Crisis — System Outage': 'A significant failure in your technical infrastructure that prevents customers from accessing the product. Operational crises are won or lost in communication cadence: updates every 15 minutes, honest status reporting, and post-incident reviews that prevent recurrence earn more trust than the outage loses.',
+    'Regulatory Crisis — Compliance Failure': 'The discovery that the company is not in compliance with applicable laws or regulations — GDPR, HIPAA, securities law, employment law. Regulatory crises require immediate legal counsel, voluntary disclosure where appropriate, and a remediation plan. The cover-up is always worse than the violation.',
+    'The Pivot Decision': 'The strategic decision to fundamentally change the product, customer, or business model based on evidence that the current direction is not working. A pivot is not a desperate reaction — it is a disciplined hypothesis change. The best pivots preserve what is working while changing what is not.',
+    'Co-Founder Breakup': 'The formal separation between founding partners — a legal, emotional, and operational event that affects every stakeholder in the company. Most co-founder breakups are survivable if handled with vesting cliffs, clear equity buyback terms, and communication to the team that preserves trust in leadership.',
+    'Bridge Financing': 'A short-term loan or convertible investment that extends runway while a company works toward its next milestone or formal funding round. Bridge financing buys time — but time is only valuable if it is used to materially change the company\'s trajectory. A bridge that leads to another bridge rarely ends well.',
+    'Acquisition Offer During Crisis': 'An offer to acquire the company that arrives during a difficult period — when the company is most vulnerable and the founder\'s judgment is most compromised. Crisis acquisitions rarely maximize value for founders and employees. The discipline required is to slow down, engage advisors, and evaluate honestly.',
+    'The Morale Crisis': 'The state in which team energy, belief in the mission, and trust in leadership have declined to a point where performance is measurably affected. Morale crises often precede key-person departures. They are caused by poor communication, unrealized promises, or sustained uncertainty — and are repaired through honest, consistent leadership behavior.',
+    'Layoffs — How and When': 'The reduction of headcount as a financial or strategic necessity — one of the most psychologically difficult decisions a founder makes. Layoffs done well: decided quickly when the evidence is clear, executed in one cut rather than multiple rounds, communicated with honesty and genuine support for those affected.',
+    'The Board Crisis': 'A breakdown in the relationship between the founder and the board of directors — often involving loss of confidence, a failed financing, or a governance dispute. Board crises that are not addressed become removal events. The founder who manages them proactively — with transparency and a credible plan — almost always survives.',
+    'Founder Burnout': 'The state of physical, emotional, and cognitive exhaustion that results from sustained high-stress, high-stakes work without adequate recovery. Founder burnout is not a weakness — it is a physiological response to sustained cortisol that impairs decision-making before the founder recognizes it. It is also preventable.',
+    'Market Crisis — Macro Economic Shock': 'An external economic event — recession, interest rate shock, pandemic, geopolitical disruption — that changes customer buying behavior, fundraising conditions, or operating costs. Market crises reward companies with strong unit economics, customer relationships, and financial discipline. They eliminate companies that were relying on favorable conditions to survive.',
+    'The Pivot Playbook': 'The structured process for executing a strategic pivot: preserving team morale, managing investor communication, salvaging existing customer relationships, and repositioning the product for the new direction. The difference between a pivot and chaos is the discipline of the transition plan.',
+    'Communicating Bad News': 'The practice of sharing difficult information — missed projections, customer losses, team departures, or product failures — with stakeholders in a way that maintains trust and preserves relationships. Bad news shared proactively and honestly compounds trust. Bad news that surfaces as a surprise destroys it.',
+    'Crisis as Opportunity': 'The counterintuitive insight that crises create competitive advantages for founders who respond well — through talent availability, reduced competition, customer trust, and organizational learning. The companies that emerge strongest from crises are those that used the constraint to make decisions they had been avoiding.',
+    'Recovery Planning': 'The structured process of rebuilding after a significant setback — defining what success looks like post-crisis, sequencing recovery milestones, and communicating the plan to the team and investors with credibility. Recovery planning converts a reactive crisis response into a proactive rebuilding narrative.',
+    'Resilience Systems': 'The organizational practices, technical redundancies, financial buffers, and leadership behaviors that reduce the impact of future crises — incident response protocols, diverse funding sources, cross-trained teams, and founder mental health practices. Resilient companies build infrastructure before they need it.',
+    // Stage 10 — The Legacy
+    'Defining Your Legacy': 'The deliberate articulation of what you want your company, career, and impact to have meant — a standard against which you measure the decisions you make in the years of maximum influence. Legacy is not built at the end. It is the accumulated result of thousands of small decisions made with consistent intent.',
+    'The Exit Landscape': 'The range of possible outcomes for a company\'s ownership structure over time — IPO, strategic acquisition, private equity buyout, management buyout, or continued private operation. Understanding the exit landscape helps founders make decisions today that preserve optionality rather than foreclose it.',
+    'M&A Process': 'The sequence of events from initial acquisition interest to completed transaction: preliminary discussions, LOI (Letter of Intent), due diligence, purchase agreement negotiation, regulatory clearance, and closing. Most founders experience M&A once. The acquirers do it dozens of times. The information asymmetry is significant.',
+    'IPO Readiness': 'The financial, operational, governance, and cultural preparation required to take a company public — audited financials, SEC reporting systems, analyst relations, investor relations capability, and executive team depth. Companies that prepare for IPO three years early execute them better than those who prepare three months early.',
+    'Founder Transition': 'The shift in a founder\'s role as the company scales — from individual contributor to manager to executive to board member to chair. Each transition requires different skills, a different daily agenda, and a different definition of what "adding value" means. Many founders struggle most with letting go of what made them successful.',
+    'Board Independence': 'The practice of adding independent directors to the board — people with no financial interest in the company and no employment relationship — who provide objective governance and outside perspective. Independent boards signal maturity to investors, acquirers, and future employees. They also force accountability on the CEO.',
+    'Building for Generational Value': 'Designing the company\'s strategy, culture, and institutions to outlast the founding team — to continue creating value decades after the founders have moved on. Companies built for generational value prioritize systems over individuals, culture over strategy, and principles over tactics.',
+    'Corporate Culture at Scale': 'The challenge of preserving and transmitting the values, behaviors, and working norms of the founding team as the company grows to hundreds or thousands of employees — through explicit documentation, leadership modeling, hiring criteria, and organizational design.',
+    'The Founder\'s Role at 100 Employees': 'The specific transition in a founder\'s job when the company reaches the size where the founder cannot know everyone personally, cannot be in every decision, and cannot maintain culture through direct relationship alone. The founder must shift from doing to enabling — and from managing people to managing managers.',
+    'Giving Back — Mentorship': 'The practice of investing time in the next generation of founders — sharing hard-won lessons, making introductions, and providing the kind of contextual guidance that no book or course can replicate. Mentorship is both the most generous and the most strategically valuable thing a successful founder can do.',
+    'Documenting Institutional Knowledge': 'The systematic capture of the organizational wisdom that exists only in people\'s heads — the decisions made, the reasoning behind them, and the lessons learned — before those people leave or the organization grows past the point where informal transmission works.',
+    'Succession Planning': 'The deliberate preparation for the transition of leadership — identifying and developing internal candidates, creating the board process for CEO selection, and managing the psychological complexity of a founder transitioning out of an operational role into a different one.',
+    'The Board Chair Role': 'The leadership position responsible for managing the board itself — setting agendas, facilitating discussion, evaluating CEO performance, and managing shareholder relations. A strong board chair makes both the board and the CEO more effective. A weak one creates governance ambiguity.',
+    'Long-Term Capital Strategy': 'The planning of how the company will be financed over a multi-year horizon — through equity rounds, debt facilities, revenue reinvestment, or eventual public market capital. Long-term capital strategy determines the company\'s growth optionality and the degree of founder control that survives over time.',
+    'Employee Stock Liquidity': 'The mechanisms by which employees can convert their equity into cash before a company goes public or is acquired — secondary sales, tender offers, or structured liquidity programs. Liquidity events for employees are one of the most effective retention tools a late-stage company has.',
+    'The Acqui-hire': 'An acquisition driven primarily by the desire to acquire talent rather than products or revenue — common when the founding team has valuable skills but the product has not achieved market success. Acqui-hires provide a defined outcome for founders and employees but typically involve modest returns.',
+    'Strategic Partnerships at Scale': 'The use of formal partnerships with complementary companies — technology integrations, joint go-to-market agreements, distribution deals — to extend reach, enhance product value, and create ecosystem lock-in that benefits all partners. Strategic partnerships require dedicated management to deliver on their potential.',
+    'Brand at Maturity': 'The ongoing management of brand positioning, visual identity, and narrative as the company evolves beyond startup into an established player. Mature brand management involves protecting what has been built while evolving to remain relevant — a balance between consistency and renewal.',
+    'Innovation at Scale': 'The organizational challenge of maintaining the speed, creativity, and risk tolerance of a startup inside a company that has grown large enough to have bureaucratic instincts. Companies that sustain innovation at scale do so through dedicated innovation units, explicit protection of experimentation time, and leadership that models the behavior.',
+    'The Next Company': 'The founder\'s consideration of what comes after the current venture — whether as a serial entrepreneur, investor, operator, or something else entirely. Founders who think about the next chapter early make better decisions about their current one: they know what they are optimizing for beyond this company.',
+    'Writing the Founder\'s Story': 'The articulation of what you built, why, what you learned, and what you would do differently — a narrative that creates value for future founders, employees, investors, and yourself. The founder\'s story is a lever of influence that continues to work long after the company has moved on without you.',
+    'Creating the Endowment': 'The strategic allocation of personal wealth generated from a successful exit — to philanthropy, investment, or institution-building — that reflects the values you built the company around. The endowment decision is the most personal expression of legacy. It tells the world what you actually believed in.',
+    'The Advisor Network': 'The ecosystem of former colleagues, investors, operators, and domain experts that a founder cultivates over time and leverages for introductions, advice, and support. The advisor network is built in good times and relied on in hard ones. Founders who invest in relationships before they need them are never alone when they do.',
+    'Impact Measurement': 'The practice of systematically assessing the non-financial outcomes generated by the company — for customers, employees, communities, and society. Impact measurement holds the company accountable to the mission beyond financial return and provides evidence that the company is doing what it says it stands for.',
+    'The Founder\'s Final Decision': 'The ultimate choice every founder faces: when to step back, when to step down, and what the company truly needs from you at each stage of its life. The best founders make this decision on the company\'s terms rather than their own ego\'s terms — and they make it before circumstances force it.',
+  };
+
+  // 25 distinct question types — each tests a completely different dimension
+  const Q_TYPES = [
+    // 0: What most founders get wrong (failure mode)
+    (topic) => `Most first-time founders approach this the wrong way. What is the failure mode that consistently shows up — and why is it so hard to avoid?`,
+    // 1: Highest-leverage first move
+    (topic) => `You have two hours this week to make meaningful progress here. What is the single highest-leverage action and why does everything else follow from it?`,
+    // 2: Mentor failure pattern
+    (topic) => `The Mentor says: "I have watched this go wrong in over forty companies. They all make the same decision at the same moment." What is that decision?`,
+    // 3: What success looks like
+    (topic) => `Describe what "done right" looks like in practice. How does a founder know they have genuinely gotten this right rather than just gotten comfortable?`,
+    // 4: Counterintuitive truth
+    (topic) => `The counterintuitive truth about this — the insight most founders only discover after getting it wrong — is which of the following?`,
+    // 5: Resource-constrained founder
+    (topic) => `A well-funded competitor is investing heavily here. What does the smart, resource-constrained startup do instead — and why does that approach often win?`,
+    // 6: Leo's hard-learned lesson
+    (topic) => `Leo says: "I tried the obvious approach, then the expensive approach, and then finally the one that actually works." Which approach is he describing?`,
+    // 7: Timing and sequencing
+    (topic) => `Sam argues that the biggest mistake here is not getting it wrong — it is getting it in the wrong sequence relative to other priorities. What does he mean?`,
+    // 8: Second-order consequence
+    (topic) => `The immediate first-order impact is obvious. What is the second-order consequence that surprises founders who did not think far enough ahead?`,
+    // 9: What investor scrutiny reveals
+    (topic) => `A Series A investor asks pointed questions about this during diligence. What answer demonstrates that the founder has done the real work rather than the surface work?`,
+    // 10: Maya's brand lens
+    (topic) => `Maya says: "The damage from getting this wrong is rarely visible in month one. By month twelve it is undeniable." What is she specifically warning against?`,
+    // 11: The right mental model
+    (topic) => `Which mental model or decision-making framework most reliably leads to the right call here — and what does applying it actually look like?`,
+    // 12: Before vs after product-market fit
+    (topic) => `The right approach before product-market fit is often the wrong approach after it. What changes, and what must be designed differently from the start to survive both phases?`,
+    // 13: Customer's invisible experience
+    (topic) => `Your best customer never sees this decision being made. But they feel the outcome in their experience. What do they feel if you get it wrong — and when does that feeling appear?`,
+    // 14: The delegation threshold
+    (topic) => `You can handle this personally, delegate it to a hire, or build a system for it. Which is correct at the seed stage — and what is the signal that tells you to shift?`,
+    // 15: Zara's portfolio pattern
+    (topic) => `Zara has seen founders get the metrics right but still fail here. What does she say they consistently miss — the human or qualitative element that numbers cannot capture?`,
+    // 16: Five-year structural impact
+    (topic) => `Sam says: "In five years this is either a structural competitive advantage or a structural liability. There is almost never a middle ground." What determines which outcome you get?`,
+    // 17: Crisis version of the decision
+    (topic) => `When this becomes a crisis rather than a background priority, what is the first move that prevents it from escalating — and what common reaction makes it worse?`,
+    // 18: The founder personality trap
+    (topic) => `The Mentor says certain founder personalities are systematically prone to one specific failure here. Which personality type and which failure?`,
+    // 19: Benchmark reality
+    (topic) => `What does "good" actually look like here in terms an investor or operator would recognize — not aspirationally, but in concrete, measurable terms at the seed and Series A stage?`,
+    // 20: The decision that ages well
+    (topic) => `Looking back from five years of hindsight, which choice here do founders almost universally say they wish they had made earlier — and what prevented them from making it at the time?`,
+    // 21: Speed vs depth trade-off
+    (topic) => `You are under time pressure and must choose between moving fast with an imperfect approach or moving slower with a thorough one. What does the evidence say about this trade-off?`,
+    // 22: Hiring implications
+    (topic) => `Getting this right requires a specific type of thinking that not everyone on your team has. How do you identify whether you have that capability in-house or need to bring it in?`,
+    // 23: The common shortcut that breaks
+    (topic) => `There is a shortcut most founders take here that works fine at ten customers and breaks badly at one hundred. What is the shortcut and what should be built instead?`,
+    // 24: Final decision question
+    (topic) => `You must make a permanent decision about this today. Three advisors give you three different recommendations. Which principle cuts through the disagreement?`,
+  ];
+
+  // 5 distinct choice pools — varied enough to feel genuinely different
+  const CHOICE_POOLS = [
+    [
+      'Start with the customer experience and work backwards from what they actually need',
+      'Move fast with a rough first version and refine based on what breaks first',
+      'Find one competitor doing this well and deconstruct their exact approach',
+      'Treat it as a permanent founder responsibility until you fully understand it',
+    ],
+    [
+      'Define clear success criteria before starting, then measure against them weekly',
+      'Delegate to a specialist immediately — this is not the best use of founder time',
+      'Build a minimal repeatable process first before investing in optimization',
+      'Make a reversible decision now and a permanent one after 30 days of real data',
+    ],
+    [
+      'Focus on the highest-leverage 20% that drives 80% of the outcome',
+      'Prioritize this only after achieving product-market fit and a stable team',
+      'Handle it reactively when it becomes urgent rather than proactively',
+      'Invest in the foundational version early so you never have to rebuild it',
+    ],
+    [
+      'The approach that keeps the most options open for the longest time',
+      'The approach that generates the fastest honest signal about whether it is working',
+      'The approach the team can execute with current resources without burning out',
+      'The approach that your best future customer would find most credible',
+    ],
+    [
+      'Maintain close personal involvement until the pattern is deeply understood',
+      'Over-communicate context to the team so the decision can be distributed',
+      'Accept imperfect execution now in exchange for speed and learning',
+      'Build the system to be auditable so anyone can review the reasoning later',
+    ],
+    [
+      'Customer obsession — trace every decision back to a specific customer outcome',
+      'Financial discipline — every decision should pass a unit economics test',
+      'Speed of execution — the fastest decision is almost always better at this stage',
+      'Team alignment — nothing should advance unless the key people are genuinely bought in',
+    ],
+    [
+      'Address it surgically and specifically rather than with a broad systemic change',
+      'Delay addressing it until it becomes the clear top priority — triage matters',
+      'Involve the team in the diagnosis before committing to any solution',
+      'Fix the symptom now and the root cause in the next planning cycle',
+    ],
+  ];
+
   const topics3to10 = Object.entries(stageTopics);
 
   let nextId = raw.length + 1;
@@ -641,20 +953,36 @@ function buildSkillsData() {
     for (let i = 0; i < topics.length; i++) {
       const topic = topics[i];
       const dialogueFn = dialogueTemplates[i % dialogueTemplates.length];
-      const qFn = questionTemplates[i % questionTemplates.length];
-      const choices = generateChoices();
+      const concept = CONCEPT_MAP[topic] || `${topic} is a core discipline in company building — understanding the principles, trade-offs, and failure modes here separates founders who build with intention from those who build by accident.`;
+
+      // Pick 5 DISTINCT question types for this skill — varied across skills
+      const baseOffset = (i * 7 + stageId * 13) % Q_TYPES.length;
+      const qIndices = [];
+      for (let k = 0; k < 5; k++) {
+        qIndices.push((baseOffset + k * 5) % Q_TYPES.length);
+      }
+
+      // Pick distinct choice pool per question
+      const questions = qIndices.map((qIdx, qi) => {
+        const poolIdx = (qi * 3 + i * 2 + stageId) % CHOICE_POOLS.length;
+        const pool = CHOICE_POOLS[poolIdx];
+        const correctIdx = (qi + i + stageId) % 4;
+        return {
+          q: Q_TYPES[qIdx](topic),
+          choices: [...pool],
+          correctIndex: correctIdx,
+          feedback: `Founders who master this discipline share one pattern: they treat it as a system to be designed, not a problem to be solved once. The correct answer reflects the operating principle that holds at every stage of company growth.`,
+          lesson: `Apply this principle the next time you face a decision in this area. The insight compounds: each correct application builds the judgment to handle the harder version of this decision that will arrive later.`,
+        };
+      });
+
       raw.push({
         id: nextId++,
         stageId,
         title: topic,
         type: 'Skill',
-        questions: Array.from({length: 5}, (_, qi) => ({
-          q: questionTemplates[qi % questionTemplates.length](topic),
-          choices: generateChoices(),
-          correctIndex: Math.floor(Math.random() * 4),
-          feedback: `Mastering ${topic} is one of the highest-leverage investments a founder can make at the stage where this question becomes relevant. The patterns that work are grounded in customer truth, not conventional wisdom.`,
-          lesson: `Document your approach to ${topic} explicitly. What is not written down cannot be improved or taught to your team.`,
-        })),
+        concept,
+        questions,
         _dialogueFn: dialogueFn,
         _topic: topic,
       });
@@ -1020,18 +1348,18 @@ function openSkillWithData(skill) {
 }
 
 function generateConceptTeaching(q, questionIdx, skill) {
-  const lesson = (q.lesson || '').trim();
-  const frames = [
-    `Before you answer — the principle at work here: ${lesson}`,
-    `Every serious founder internalizes this concept: ${lesson} Keep it in mind as you make your call.`,
-    `Context before the decision. The insight that matters most here: ${lesson}`,
-    `Most founders miss this on first instinct. What you need to understand first: ${lesson}`,
-    `The business principle this scenario tests: ${lesson}`,
-    `Here is what separates reactive founders from strategic ones in this situation: ${lesson}`,
-    `Think through this before choosing. The underlying rule: ${lesson}`,
-    `The founders who get this right share one understanding: ${lesson} Now apply it.`,
+  const concept = (skill.concept || q.lesson || '').trim();
+  if (!concept) return '';
+
+  const prefixes = [
+    'CONCEPT',
+    'WHAT THIS IS',
+    'THE PRINCIPLE',
+    'UNDERSTAND THIS FIRST',
+    'CORE IDEA',
   ];
-  return frames[(questionIdx * 3 + skill.id * 7) % frames.length];
+  const prefix = prefixes[questionIdx % prefixes.length];
+  return `${prefix} — ${concept}`;
 }
 
 function renderQuestion() {
@@ -1269,6 +1597,15 @@ function selectAnswer(choiceIdx) {
     if (i === q.correctIndex) btn.classList.add('correct');
     else if (i === choiceIdx && !isCorrect) btn.classList.add('wrong');
   });
+
+  // Burst particles on correct answer
+  if (isCorrect) {
+    const btns2 = document.querySelectorAll('.choice-btn.correct');
+    if (btns2.length) {
+      const r = btns2[0].getBoundingClientRect();
+      burstParticles(r.left + r.width / 2, r.top + r.height / 2, 20);
+    }
+  }
 
   // Show feedback
   document.getElementById('questionArea').style.display = 'none';
@@ -1942,6 +2279,11 @@ function init() {
     document.documentElement.style.setProperty('--my', `${e.clientY}px`);
   });
 
+  initCursorFX();
+  initRippleEffect();
+  initMagneticButtons();
+  initCardTilt();
+
   if (state.completedSkills.length > 0) {
     showPage('dashboard');
     renderDashboard();
@@ -1949,3 +2291,154 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// =============================================
+// CURSOR PARTICLE SYSTEM
+// =============================================
+function initCursorFX() {
+  const dot  = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  if (!dot || !ring) return;
+
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  let rx = mx, ry = my;
+
+  document.addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform  = `translate(${mx}px,${my}px)`;
+    spawnTrailParticle(mx, my);
+  });
+
+  function lerpRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(lerpRing);
+  }
+  lerpRing();
+
+  document.addEventListener('mousedown', () => ring.classList.add('cursor-ring--press'));
+  document.addEventListener('mouseup',   () => ring.classList.remove('cursor-ring--press'));
+
+  const hoverEls = 'a, button, .skill-card, .stage-card, .char-card, .feature-card, .choice-btn, .step-card';
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest(hoverEls)) {
+      dot.classList.add('cursor-dot--hover');
+      ring.classList.add('cursor-ring--hover');
+    }
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest(hoverEls)) {
+      dot.classList.remove('cursor-dot--hover');
+      ring.classList.remove('cursor-ring--hover');
+    }
+  });
+}
+
+const TRAIL_COLORS = ['#c8922a','#e8b44a','#f5c96a','#d4a040','#f0d080'];
+let lastTrailTime = 0;
+function spawnTrailParticle(x, y) {
+  const now = Date.now();
+  if (now - lastTrailTime < 40) return;
+  lastTrailTime = now;
+
+  const p = document.createElement('div');
+  p.className = 'cursor-particle';
+  const size = 4 + Math.random() * 5;
+  const color = TRAIL_COLORS[Math.floor(Math.random() * TRAIL_COLORS.length)];
+  const angle = Math.random() * Math.PI * 2;
+  const dist  = 8 + Math.random() * 14;
+  const tx = Math.cos(angle) * dist;
+  const ty = Math.sin(angle) * dist;
+  p.style.cssText = `
+    left:${x}px; top:${y}px;
+    width:${size}px; height:${size}px;
+    background:${color};
+    --tx:${tx}px; --ty:${ty}px;
+  `;
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 700);
+}
+
+// =============================================
+// RIPPLE EFFECT ON CLICK
+// =============================================
+function initRippleEffect() {
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('button, .cta-btn, .choice-btn, .skill-card, .stage-card');
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const r = document.createElement('span');
+    r.className = 'ripple-fx';
+    r.style.left = `${e.clientX - rect.left}px`;
+    r.style.top  = `${e.clientY - rect.top}px`;
+    el.style.position = 'relative';
+    el.style.overflow  = 'hidden';
+    el.appendChild(r);
+    setTimeout(() => r.remove(), 600);
+  });
+}
+
+// =============================================
+// MAGNETIC BUTTONS
+// =============================================
+function initMagneticButtons() {
+  const targets = document.querySelectorAll('.cta-btn, .cta-btn-outline, .nav-cta-btn');
+  targets.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width  / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.25;
+      const dy = (e.clientY - cy) * 0.25;
+      el.style.transform = `translate(${dx}px,${dy}px) scale(1.04)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
+}
+
+// =============================================
+// CARD TILT (3-D) EFFECT
+// =============================================
+function initCardTilt() {
+  const cards = document.querySelectorAll('.char-card, .feature-card, .step-card, .stage-card, .skill-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width  / 2;
+      const cy = rect.top  + rect.height / 2;
+      const rx = ((e.clientY - cy) / rect.height) * -14;
+      const ry = ((e.clientX - cx) / rect.width)  *  14;
+      card.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
+      card.style.boxShadow = `${-ry * 0.5}px ${rx * 0.5}px 32px rgba(100,60,20,0.22)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.boxShadow = '';
+    });
+  });
+}
+
+// =============================================
+// BURST PARTICLES ON CORRECT ANSWER
+// =============================================
+function burstParticles(x, y, count = 16) {
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'burst-particle';
+    const angle = (i / count) * Math.PI * 2;
+    const dist  = 40 + Math.random() * 50;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+    const colors = ['#c8922a','#e8b44a','#6b8f71','#f5e6c4','#d4811a'];
+    p.style.cssText = `
+      left:${x}px; top:${y}px;
+      background:${colors[i % colors.length]};
+      --tx:${tx}px; --ty:${ty}px;
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 900);
+  }
+}
