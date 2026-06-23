@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 </head>
 <body>
 
@@ -25,11 +26,6 @@
   <span id="warningBannerText"></span>
   <button onclick="document.getElementById('warningBanner').classList.add('hidden')" class="warning-close">✕</button>
 </div>
-
-<!-- NIGHT MODE TOGGLE -->
-<button class="night-toggle" id="nightToggle" title="Toggle Night Mode">
-  <span class="night-toggle-icon" id="nightToggleIcon">&#9790;</span>
-</button>
 
 <!-- ===================== LANDING PAGE ===================== -->
 <div id="landing" class="page active">
@@ -50,8 +46,11 @@
 
   <nav class="landing-nav">
     <div class="logo-lockup">
-      <div class="logo-mark"></div>
-      <span class="logo-text">FounderPath</span>
+      <div class="fp-logo fp-logo-dark">
+        <div class="fp-logo-eyebrow"></div>
+        <span class="fp-logo-founder"></span>
+        <span class="fp-logo-path"></span>
+      </div>
     </div>
     <div class="nav-links">
       <a href="#features" class="nav-link">Features</a>
@@ -59,7 +58,22 @@
       <a href="#dictionary-preview" class="nav-link">Dictionary</a>
     </div>
     <button class="nav-cta-btn" id="startBtnNav">Start for Free</button>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a class="mobile-nav-link" href="#features" id="mobileFeatures">Features</a>
+      <a class="mobile-nav-link" href="#stages" id="mobileStages">Stages</a>
+      <a class="mobile-nav-link" href="#dictionary-preview" id="mobileDict">Dictionary</a>
+      <div class="mobile-menu-divider"></div>
+      <button class="mobile-nav-link mobile-about-link" id="mobileAboutBtn">About Us</button>
+      <button class="cta-btn mobile-menu-cta" id="mobileStartBtn">Start for Free →</button>
+    </div>
+  </div>
 
   <!-- HERO -->
   <div class="hero-section" id="hero">
@@ -113,13 +127,13 @@
 
   <!-- CHARACTERS -->
   <div class="characters-section">
-    <div class="section-label">MEET YOUR GUIDES</div>
+    <div class="section-label">MEET YOUR FICTIONAL GUIDES</div>
     <div class="section-headline">Five voices. Five perspectives. All honest.</div>
     <div class="char-grid">
       <div class="char-card">
         <div class="char-avatar mentor-av">M</div>
         <div class="char-name">The Mentor</div>
-        <div class="char-role">16,000 startups observed</div>
+        <div class="char-role">16 startups observed</div>
         <div class="char-quote">"I have watched empires built on napkins and billion-dollar ideas die in boardrooms. Listen carefully."</div>
       </div>
       <div class="char-card">
@@ -152,13 +166,13 @@
   <!-- FEATURES -->
   <div class="features-section" id="features">
     <div class="section-label">WHAT IS INSIDE</div>
-    <div class="section-headline">Everything a real founder education needs.</div>
+    <div class="section-headline">Everything a real founder needs.</div>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon-wrap">
           <div class="feature-icon f-gold">S</div>
         </div>
-        <div class="feature-title">250 Cinematic Skills</div>
+        <div class="feature-title">220 Cinematic Skills</div>
         <div class="feature-desc">Every question is a scene. Characters argue, challenge, and teach through scenarios pulled from real founder experiences — not textbooks.</div>
       </div>
       <div class="feature-card">
@@ -279,7 +293,7 @@
       <div class="step-card">
         <div class="step-num">06</div>
         <div class="step-title">Build Your Legacy</div>
-        <div class="step-desc">Collect wisdom in your journal. Earn badges. Receive mentor letters. Complete all 250 skills and earn your Founder's Certificate.</div>
+        <div class="step-desc">Collect wisdom in your journal. Earn badges. Receive mentor letters. Complete all 220 skills and earn your Founder's Certificate.</div>
       </div>
     </div>
   </div>
@@ -299,7 +313,20 @@
       <div class="bp-badge locked"><div class="bp-icon bp-lock">?</div><div class="bp-name">???</div></div>
       <div class="bp-badge locked"><div class="bp-icon bp-lock">?</div><div class="bp-name">???</div></div>
     </div>
-    <div class="badges-hint">30+ badges to unlock. Some are secret.</div>
+    <div class="badges-hint">20+ badges to unlock.</div>
+  </div>
+
+  <!-- WHY FOUNDERPATH -->
+  <div class="why-section" id="whySection">
+    <div class="why-inner">
+      <div class="why-eyebrow">Why FounderPath?</div>
+      <h2 class="why-headline">Entrepreneurship isn't learned by watching lectures.</h2>
+      <p class="why-body">It is learned through difficult decisions, uncertainty, failures, pivots, and persistence.<br><br>FounderPath recreates those moments before they happen in real life — helping aspiring entrepreneurs build judgment rather than simply memorize concepts.</p>
+      <div class="why-cta-row">
+        <button class="cta-btn" id="aboutUsBtn">About Us</button>
+        <button class="cta-btn-outline" id="ourMissionBtn">Our Mission</button>
+      </div>
+    </div>
   </div>
 
   <!-- FINAL CTA -->
@@ -316,13 +343,16 @@
     <div class="footer-inner">
       <div class="footer-left">
         <div class="footer-logo">
-          <span class="footer-logo-mark">FP</span>
-          <span class="footer-logo-text">FounderPath</span>
+          <div class="fp-logo fp-logo-dark">
+            <div class="fp-logo-eyebrow">The Entrepreneur's Playground</div>
+            <span class="fp-logo-founder">Founder</span>
+            <span class="fp-logo-path">Path</span>
+          </div>
         </div>
-        <div class="footer-tagline">The Entrepreneur's Playground</div>
+        <div class="footer-tagline"></div>
       </div>
       <div class="footer-right">
-        <div class="footer-copy">&copy; 2025 FounderPath. All rights reserved.</div>
+        <div class="footer-copy">&copy; 2026 FounderPath. All rights reserved.</div>
         <div class="footer-credit">Made by <a href="https://www.linkedin.com/in/mohammad-shahan-khan" target="_blank" rel="noopener" class="footer-link">Mohammad Shahan Khan</a></div>
       </div>
     </div>
@@ -332,7 +362,11 @@
 <!-- ===================== DASHBOARD ===================== -->
 <div id="dashboard" class="page">
   <div class="dashboard-header">
-    <div class="dash-logo">FounderPath</div>
+    <div class="fp-logo">
+      <div class="fp-logo-eyebrow">The Entrepreneur's Playground</div>
+      <span class="fp-logo-founder">Founder</span>
+      <span class="fp-logo-path">Path</span>
+    </div>
     <div class="dash-progress-area">
       <div class="progress-label"><span id="completedCount">0</span> / <span id="totalSkillsCount">250</span> Skills</div>
       <div class="progress-bar-wrap"><div class="progress-bar-fill" id="mainProgressBar"></div></div>
@@ -398,7 +432,6 @@
 
     <div class="scene-area" id="sceneArea">
       <div class="concept-teaching" id="conceptTeaching"></div>
-      <div class="scene-setting" id="sceneSetting"></div>
       <div class="dialogue-block" id="dialogueBlock"></div>
     </div>
 
@@ -513,6 +546,153 @@
   <div class="glossary-tooltip-def" id="gtDef"></div>
 </div>
 
+<!-- ===================== ABOUT PAGE ===================== -->
+<div id="about" class="page">
+  <div class="about-bg">
+    <div class="about-grain"></div>
+    <div class="about-glow about-glow-1"></div>
+    <div class="about-glow about-glow-2"></div>
+  </div>
+
+  <nav class="about-nav">
+    <div class="logo-lockup">
+      <div class="fp-logo fp-logo-dark">
+        <div class="fp-logo-eyebrow">The Entrepreneur's Playground</div>
+        <span class="fp-logo-founder">Founder</span>
+        <span class="fp-logo-path">Path</span>
+      </div>
+    </div>
+    <div class="about-nav-actions">
+      <button class="about-back-btn" id="aboutBackBtn">&#8592; Back</button>
+      <button class="cta-btn about-nav-cta" id="aboutStartBtn">Start Learning</button>
+    </div>
+  </nav>
+
+  <section class="about-hero">
+    <p class="about-eyebrow">About FounderPath</p>
+    <h1 class="about-hero-heading">Building Better<br><em>Founders.</em></h1>
+    <p class="about-hero-sub">FounderPath exists because entrepreneurship deserves better education than static videos and expensive courses. Instead of teaching theory, we teach decision-making.</p>
+    <div class="about-hero-line"></div>
+  </section>
+
+  <section class="about-section" id="mission">
+    <div class="about-section-inner">
+      <p class="about-section-label">Our Mission</p>
+      <h2 class="about-section-heading">Practical. Interactive.<br>Accessible.</h2>
+      <p class="about-section-body">To make world-class entrepreneurial education practical, interactive, and accessible for anyone with an idea and the will to pursue it. We believe the gap between a great idea and a great company is judgment — and judgment is earned through decisions, not lectures.</p>
+    </div>
+  </section>
+
+  <section class="about-stats-band">
+    <div class="about-stats-inner">
+      <div class="about-stat-item">
+        <div class="about-stat-num">220</div>
+        <div class="about-stat-label">Real-world decisions</div>
+      </div>
+      <div class="about-stat-divider"></div>
+      <div class="about-stat-item">
+        <div class="about-stat-num">10</div>
+        <div class="about-stat-label">Stages of the journey</div>
+      </div>
+      <div class="about-stat-divider"></div>
+      <div class="about-stat-item">
+        <div class="about-stat-num">20+</div>
+        <div class="about-stat-label">Badges to earn</div>
+      </div>
+      <div class="about-stat-divider"></div>
+      <div class="about-stat-item">
+        <div class="about-stat-num">5</div>
+        <div class="about-stat-label">Mentor characters</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section">
+    <div class="about-section-inner about-values-inner">
+      <p class="about-section-label">Our Values</p>
+      <h2 class="about-section-heading">What we stand for.</h2>
+      <div class="about-values-grid">
+        <div class="about-value-card">
+          <div class="about-value-icon">&#9672;</div>
+          <div class="about-value-title">Learn by Doing</div>
+          <div class="about-value-body">Experience beats memorization. The only way to build founder judgment is to make founder decisions.</div>
+        </div>
+        <div class="about-value-card">
+          <div class="about-value-icon">&#9672;</div>
+          <div class="about-value-title">Failure is Feedback</div>
+          <div class="about-value-body">Every wrong answer teaches something real. Mistakes inside the simulation are lessons before they become losses.</div>
+        </div>
+        <div class="about-value-card">
+          <div class="about-value-icon">&#9672;</div>
+          <div class="about-value-title">Think Long-Term</div>
+          <div class="about-value-body">Build companies that matter. The best founders think in decades, not quarters.</div>
+        </div>
+        <div class="about-value-card">
+          <div class="about-value-icon">&#9672;</div>
+          <div class="about-value-title">Build Ethically</div>
+          <div class="about-value-body">Technology should improve lives. Every decision in FounderPath reflects the real-world weight of that responsibility.</div>
+        </div>
+        <div class="about-value-card">
+          <div class="about-value-icon">&#9672;</div>
+          <div class="about-value-title">Stay Curious</div>
+          <div class="about-value-body">The best founders never stop learning. Neither should you.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-section-alt">
+    <div class="about-section-inner">
+      <p class="about-section-label">Who This Is For</p>
+      <h2 class="about-section-heading">For the ones who aren't waiting.</h2>
+      <div class="about-pillars">
+        <div class="about-pillar">
+          <div class="about-pillar-num">01</div>
+          <div class="about-pillar-title">First-time founders</div>
+          <div class="about-pillar-body">Who want to understand what building a company actually feels like before betting years of their life on it.</div>
+        </div>
+        <div class="about-pillar">
+          <div class="about-pillar-num">02</div>
+          <div class="about-pillar-title">Aspiring entrepreneurs</div>
+          <div class="about-pillar-body">Who are studying business but want something real — not frameworks, not slides, but the texture of difficult decisions.</div>
+        </div>
+        <div class="about-pillar">
+          <div class="about-pillar-num">03</div>
+          <div class="about-pillar-title">Curious minds</div>
+          <div class="about-pillar-body">Who want to understand how great companies get built — the judgment behind the strategy, not just the outcome.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section">
+    <div class="about-section-inner">
+      <p class="about-section-label">The Founder</p>
+      <h2 class="about-section-heading">Mohammad Shahan Khan</h2>
+      <p class="about-founder-role">Founder &middot; Builder &middot; Product Thinker</p>
+      <div class="about-founder-body">
+        <p>FounderPath started with a simple frustration: most entrepreneurship education focuses on theory, not reality.</p>
+        <p>Building a company is not a sequence of lessons. It is a chain of decisions made under uncertainty, pressure, and incomplete information.</p>
+        <p>I wanted to design something that reflects that reality. FounderPath is my attempt to turn entrepreneurship into a lived experience rather than passive learning — a place where you learn to think like a founder before you ever take real-world risks.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta-section">
+    <div class="about-cta-inner">
+      <p class="about-cta-eyebrow">Ready?</p>
+      <h2 class="about-cta-heading">Build judgment before<br>you need it.</h2>
+      <p class="about-cta-sub">250 decisions. 10 stages. One journey from idea to legacy.</p>
+      <button class="cta-btn cta-btn-large" id="aboutStartBtn2">Begin the Journey &#8594;</button>
+    </div>
+  </section>
+
+  <footer class="about-footer">
+    <span class="about-footer-brand">FounderPath</span>
+    <span class="about-footer-copy">&copy; 2026 FounderPath. The Entrepreneur's Playground.</span>
+  </footer>
+</div>
+
 <!-- ===================== MARKET SIMULATION ===================== -->
 <div id="marketSim" class="page">
   <div class="market-header">
@@ -577,23 +757,40 @@
 <!-- ===================== COMPLETION ===================== -->
 <div id="completionScreen" class="page">
   <div class="completion-content">
-    <div class="cert-frame">
-      <div class="cert-brand">
-        <span class="cert-logo-mark">FP</span> FounderPath
+
+    <!-- Step 1: name entry -->
+    <div class="cert-name-step" id="certNameStep">
+      <div class="cert-name-icon">&#127881;</div>
+      <h2 class="cert-name-heading">You completed FounderPath.</h2>
+      <p class="cert-name-sub">Enter your name to generate your certificate.</p>
+      <div class="cert-name-input-row">
+        <input type="text" id="founderNameInput" class="cert-name-input" placeholder="Your full name" maxlength="60" autocomplete="name" />
+        <button class="cert-name-btn" id="certNameBtn">Generate &#8594;</button>
       </div>
-      <div class="cert-label">FOUNDER'S CERTIFICATE</div>
-      <div class="cert-divider"></div>
-      <div class="cert-body">
-        <p>This certifies that you have completed all</p>
-        <p class="cert-big">250 Skills</p>
-        <p>across 10 stages of the entrepreneurial journey.</p>
-        <br>
-        <p>You have faced decisions, survived crises,<br>and built wisdom that no classroom could ever teach.</p>
-      </div>
-      <div class="cert-divider"></div>
-      <div class="cert-sig">FounderPath &mdash; The Entrepreneur's Playground</div>
     </div>
-    <button class="reset-btn" id="resetBtn">Start Over</button>
+
+    <!-- Step 2: certificate + download -->
+    <div class="cert-wrapper" id="certWrapper" style="display:none">
+      <div class="cert-frame" id="certFrame">
+        <div class="fp-logo fp-logo-cert">
+          <div class="fp-logo-eyebrow">The Entrepreneur's Playground</div>
+          <span class="fp-logo-founder">Founder</span>
+          <span class="fp-logo-path">Path</span>
+        </div>
+        <div class="cert-label">FOUNDER'S CERTIFICATE</div>
+        <div class="cert-divider"></div>
+        <div class="cert-body">
+          <p class="cert-certify-line">This is to certify that</p>
+          <p class="cert-recipient" id="certNameDisplay">&mdash;</p>
+          <p class="cert-certify-line">has completed all <strong>220 Skills</strong> on <strong>FounderPath</strong></p>
+          <p class="cert-sub-line">across 10 stages of the entrepreneurial journey.</p>
+        </div>
+        <div class="cert-divider"></div>
+        <div class="cert-sig">FounderPath &mdash; The Entrepreneur's Playground</div>
+      </div>
+      <button class="cert-download-btn" id="certDownloadBtn">&#11015; Download Certificate</button>
+    </div>
+
   </div>
 </div>
 
