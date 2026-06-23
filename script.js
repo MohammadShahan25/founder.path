@@ -286,8 +286,6 @@ const BADGES = [
   { id:'daily_7',      name:'Week Warrior',       desc:'Complete 7 daily challenges',             icon:'D7', color:'#2d4a6a', condition: s => s.dailyChallenges >= 7 },
   { id:'daily_30',     name:'Monthly Marathon',   desc:'Complete 30 daily challenges',            icon:'DM', color:'#1a3a5c', condition: s => s.dailyChallenges >= 30 },
   { id:'zara_respect', name:"Zara's Respect",     desc:'Maintain 80%+ accuracy across 30+ questions', icon:'ZR', color:'#3d5a7a', condition: s => s.totalAnswered >= 30 && (s.totalCorrect / s.totalAnswered) >= 0.80 },
-  { id:'night_owl',    name:'Night Owl',          desc:'Complete a skill after 10pm',             icon:'NO', color:'#3d2e6b', condition: s => s.nightOwl },
-  { id:'early_bird',   name:'Early Bird',         desc:'Complete a skill before 7am',             icon:'EB', color:'#8b6914', condition: s => s.earlyBird },
   { id:'speed_demon',  name:'Speed Demon',        desc:'Answer 5 questions in under 8 seconds each', icon:'SD', color:'#a03020', condition: s => s.speedDemon >= 5 },
   { id:'comeback',     name:'Comeback Kid',       desc:'Get a skill question wrong then ace the next 5', icon:'CK', color:'#2d6a4f', condition: s => s.comebackKid },
   { id:'dict_scholar', name:'Dictionary Scholar', desc:'Look up 10 terms in the dictionary',     icon:'DS', color:'#3d5a7a', condition: s => s.dictLookups >= 10 },
@@ -1052,15 +1050,15 @@ const DEFAULT_STATE = {
   crisisesHandled: 0,
   bestValuation: 0,
   dailyChallenges: 0,
-  nightOwl: false,
-  earlyBird: false,
   speedDemon: 0,
   comebackKid: false,
+  _hadWrong: false,
   perfectSkills: 0,
   dictLookups: 0,
   _crisisScheduled: false,
   mentorLettersRead: [],
   stageMentorLetterPending: null,
+  founderName: '',
 };
 
 let state = { ...DEFAULT_STATE };
@@ -1097,31 +1095,13 @@ function updateDayStreak() {
 }
 
 // =============================================
-// NIGHT MODE
-// =============================================
-function initNightMode() {
-  const hour = new Date().getHours();
-  if (hour >= 22 || hour < 6) {
-    document.body.classList.add('night-mode');
-    document.getElementById('nightToggleIcon').textContent = '☀';
-    state.nightOwl = state.nightOwl || hour >= 22;
-    state.earlyBird = state.earlyBird || (hour >= 0 && hour < 6);
-    saveState();
-  }
-  document.getElementById('nightToggle').addEventListener('click', () => {
-    document.body.classList.toggle('night-mode');
-    const isNight = document.body.classList.contains('night-mode');
-    document.getElementById('nightToggleIcon').textContent = isNight ? '☀' : '☽';
-  });
-}
-
-// =============================================
 // PAGE NAVIGATION
 // =============================================
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const el = document.getElementById(id);
   if (el) { el.classList.add('active'); el.scrollTop = 0; }
+  window.scrollTo(0, 0);
 }
 
 // =============================================
@@ -1140,6 +1120,55 @@ function initLanding() {
     renderDashboard();
     setTimeout(openDictionary, 300);
   });
+
+  // About page navigation
+  const goToAbout = () => showPage('about');
+  const goToMission = () => {
+    showPage('about');
+    setTimeout(() => {
+      const el = document.getElementById('mission');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 80);
+  };
+  document.getElementById('aboutUsBtn').addEventListener('click', goToAbout);
+  document.getElementById('ourMissionBtn').addEventListener('click', goToMission);
+  document.getElementById('aboutBackBtn').addEventListener('click', () => showPage('landing'));
+  document.getElementById('aboutStartBtn').addEventListener('click', startGame);
+  document.getElementById('aboutStartBtn2').addEventListener('click', startGame);
+
+  // Hamburger menu
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const closeMobileMenu = () => {
+    hamburgerBtn.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+  };
+  hamburgerBtn.addEventListener('click', () => {
+    const isOpen = hamburgerBtn.classList.contains('open');
+    if (isOpen) { closeMobileMenu(); }
+    else {
+      hamburgerBtn.classList.add('open');
+      mobileMenu.classList.add('open');
+      hamburgerBtn.setAttribute('aria-expanded', 'true');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+    }
+  });
+  document.getElementById('mobileAboutBtn').addEventListener('click', () => { closeMobileMenu(); showPage('about'); });
+  document.getElementById('mobileStartBtn').addEventListener('click', () => { closeMobileMenu(); startGame(); });
+  document.querySelectorAll('.mobile-nav-link[href]').forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+  });
+
+  // Fade-up animation for Why section on scroll
+  const whySection = document.getElementById('whySection');
+  if (whySection) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    obs.observe(whySection);
+  }
 }
 
 // =============================================
@@ -1273,22 +1302,6 @@ function openStageDetail(stageId) {
 
   document.getElementById('backToDashboard').onclick = () => { showPage('dashboard'); renderDashboard(); };
 
-  // Start Over button at bottom of skills list
-  const resetCard = document.createElement('div');
-  resetCard.className = 'start-over-card';
-  resetCard.innerHTML = `
-    <div class="start-over-text">Want to begin fresh? This will permanently clear all progress, XP, and badges.</div>
-    <button class="start-over-btn" id="startOverBtn">Reset All Progress</button>
-  `;
-  list.appendChild(resetCard);
-  document.getElementById('startOverBtn').addEventListener('click', () => {
-    if (confirm('This will permanently erase all your progress, XP, badges, and journal entries. This cannot be undone. Are you sure?')) {
-      localStorage.clear();
-      showPage('landing');
-      location.reload();
-    }
-  });
-
   showPage('stageDetail');
 }
 
@@ -1347,45 +1360,28 @@ function openSkillWithData(skill) {
   renderQuestion();
 }
 
-function generateConceptTeaching(q, questionIdx, skill) {
-  const concept = (skill.concept || q.lesson || '').trim();
-  if (!concept) return '';
-
-  const prefixes = [
-    'CONCEPT',
-    'WHAT THIS IS',
-    'THE PRINCIPLE',
-    'UNDERSTAND THIS FIRST',
-    'CORE IDEA',
-  ];
-  const prefix = prefixes[questionIdx % prefixes.length];
-  return `${prefix} — ${concept}`;
+function generateConceptTeaching(q, skill) {
+  return (skill.concept || q.lesson || '').trim();
 }
+
 
 function renderQuestion() {
   const { questions, currentQ } = currentSkillSession;
   const q = questions[currentQ];
   currentSkillSession.qStartTime = Date.now();
 
+  // Reset journal save button for each new question
+  const saveBtn = document.getElementById('saveJournalBtn');
+  if (saveBtn) {
+    saveBtn.textContent = 'Save to Journal';
+    saveBtn.disabled = false;
+  }
+
   document.getElementById('qProgressText').textContent = `Question ${currentQ + 1} of ${questions.length}`;
   document.getElementById('qProgressFill').style.width = `${((currentQ) / questions.length) * 100}%`;
 
   // Concept teaching block
-  document.getElementById('conceptTeaching').textContent = generateConceptTeaching(q, currentQ, currentSkillSession.skill);
-
-  const settings = [
-    'A dimly lit conference room at 11pm. The whiteboard is covered in assumptions waiting to be stress-tested.',
-    'A rooftop terrace at sunset. The city hums forty floors below. This decision will echo for years.',
-    'A Zoom call. Eight tabs open. Coffee gone cold. Slack pinging. Sixty seconds to make the right call.',
-    'A WeWork kitchen at 8am. Someone is loud about their Series C. Your runway is 4 months. This matters.',
-    'A quiet co-working space at midnight. Everyone has gone home. This moment requires your clearest thinking.',
-    '2am. You are the only one in the office. A Slack notification just changed the landscape of everything.',
-    'An airport terminal. You fly to meet an investor in four hours. The laptop is open. The pressure is real.',
-    'A coffee shop in the rain. Your prototype just crashed in front of three potential customers.',
-    'A standing meeting that ran forty minutes over. Your co-founder is watching. The team needs your lead.',
-    'A board prep session. The numbers are on screen. Someone will ask the question you have been avoiding.',
-  ];
-  const setting = settings[(currentQ + currentSkillSession.skill.id * 3) % settings.length];
+  document.getElementById('conceptTeaching').textContent = generateConceptTeaching(q, currentSkillSession.skill);
 
   const charPools = {
     mentor: { name:'The Mentor', color:'#c8922a', bg:'#8b6914', initial:'M', lines:[
@@ -1506,7 +1502,6 @@ function renderQuestion() {
   const lineIdx = (currentQ * 11 + currentSkillSession.skill.id * 5) % char.lines.length;
   const line = char.lines[lineIdx];
 
-  document.getElementById('sceneSetting').textContent = setting;
   document.getElementById('dialogueBlock').innerHTML = `
     <div class="dialogue-line" style="animation-delay:0.1s">
       <div class="dialogue-avatar" style="background:linear-gradient(135deg,${char.bg},${char.color})">${char.initial}</div>
@@ -1581,12 +1576,13 @@ function selectAnswer(choiceIdx) {
     if (timeTaken < 8) state.speedDemon = (state.speedDemon || 0) + 1;
   } else {
     state.currentStreak = 0;
+    state._hadWrong = true;
   }
 
-  // Night owl / early bird
-  const hour = new Date().getHours();
-  if (hour >= 22) state.nightOwl = true;
-  if (hour >= 0 && hour < 7) state.earlyBird = true;
+  // Comeback Kid tracking
+  if (isCorrect && state._hadWrong && state.currentStreak >= 5) {
+    state.comebackKid = true;
+  }
 
   saveState();
 
@@ -1628,7 +1624,6 @@ function selectAnswer(choiceIdx) {
   document.getElementById('saveJournalBtn').onclick = () => {
     const entry = { skill: currentSkillSession.skill.title, text: q.lesson, date: new Date().toLocaleDateString() };
     state.journal.unshift(entry);
-    state.dictLookups = state.dictLookups || 0;
     saveState();
     document.getElementById('saveJournalBtn').textContent = 'Saved to Journal';
     document.getElementById('saveJournalBtn').disabled = true;
@@ -2187,13 +2182,55 @@ function endMarketSim() {
 function showCompletionScreen() {
   showPage('completionScreen');
   startConfetti();
-  document.getElementById('resetBtn').addEventListener('click', () => {
-    if (confirm('Are you sure you want to reset all progress?')) {
-      state = { ...DEFAULT_STATE };
-      saveState();
-      stopConfetti();
-      showPage('landing');
-    }
+
+  const certNameStep = document.getElementById('certNameStep');
+  const certWrapper = document.getElementById('certWrapper');
+  const certNameBtn = document.getElementById('certNameBtn');
+  const founderNameInput = document.getElementById('founderNameInput');
+  const certNameDisplay = document.getElementById('certNameDisplay');
+
+  // If name already saved, skip name step
+  if (state.founderName) {
+    founderNameInput.value = state.founderName;
+    certNameDisplay.textContent = state.founderName;
+    certNameStep.style.display = 'none';
+    certWrapper.style.display = 'flex';
+  }
+
+  const generateCert = () => {
+    const name = founderNameInput.value.trim();
+    if (!name) { founderNameInput.focus(); return; }
+    state.founderName = name;
+    saveState();
+    certNameDisplay.textContent = name;
+    certNameStep.style.display = 'none';
+    certWrapper.style.display = 'flex';
+  };
+
+  certNameBtn.addEventListener('click', generateCert);
+  founderNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') generateCert(); });
+
+  document.getElementById('certDownloadBtn').addEventListener('click', () => {
+    const frame = document.getElementById('certFrame');
+    const btn = document.getElementById('certDownloadBtn');
+    btn.textContent = 'Generating…';
+    btn.disabled = true;
+    html2canvas(frame, {
+      scale: 2,
+      backgroundColor: '#f5f2ec',
+      useCORS: true,
+      logging: false,
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = `FounderPath-Certificate-${(state.founderName || 'Founder').replace(/\s+/g, '-')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      btn.textContent = '⬇ Download Certificate';
+      btn.disabled = false;
+    }).catch(() => {
+      btn.textContent = '⬇ Download Certificate';
+      btn.disabled = false;
+    });
   });
 }
 
@@ -2267,7 +2304,6 @@ function initModalHandlers() {
 // =============================================
 function init() {
   loadState();
-  initNightMode();
   initLanding();
   initModalHandlers();
   initGlossaryTooltip();
