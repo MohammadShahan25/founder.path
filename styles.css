@@ -764,6 +764,79 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 .cert-download-btn:hover { background:var(--gold); transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,160,40,0.35); }
 
 /* =============================================
+   LANDING ABOUT SECTION
+   ============================================= */
+.landing-about-section {
+  position: relative; z-index: 10;
+  background: var(--ink);
+  padding: 96px 60px;
+  border-top: 1px solid rgba(200,146,42,0.12);
+  border-bottom: 1px solid rgba(200,146,42,0.12);
+}
+.landing-about-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: center;
+}
+.landing-about-label {
+  font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--gold); font-family: var(--font-mono); margin-bottom: 16px; display: block;
+}
+.landing-about-heading {
+  font-family: var(--font-serif); font-size: clamp(32px, 4vw, 56px);
+  font-weight: 900; color: var(--cream); line-height: 1.1;
+  margin-bottom: 20px; letter-spacing: -0.5px;
+}
+.landing-about-heading em { color: var(--gold); font-style: italic; }
+.landing-about-body {
+  font-size: 17px; line-height: 1.9; color: rgba(250,247,242,0.62);
+  margin-bottom: 28px;
+}
+.landing-about-values {
+  display: flex; flex-wrap: wrap; gap: 10px 24px; margin-bottom: 32px;
+}
+.landing-about-value {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: rgba(250,247,242,0.75);
+}
+.lav-icon { color: var(--gold); font-size: 11px; }
+.landing-about-full-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 26px; border: 1.5px solid rgba(200,146,42,0.5);
+  border-radius: 100px; font-size: 14px; font-weight: 600;
+  color: var(--gold); background: transparent; cursor: pointer;
+  transition: all 0.25s; font-family: var(--font-sans);
+}
+.landing-about-full-btn:hover {
+  background: rgba(200,146,42,0.1); border-color: var(--gold);
+}
+.landing-about-founder-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(200,146,42,0.2);
+  border-radius: var(--radius-xl); padding: 36px 28px;
+  text-align: center;
+}
+.landing-about-founder-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+  color: #fff; margin: 0 auto 16px; letter-spacing: 0.05em;
+}
+.landing-about-founder-name {
+  font-family: var(--font-serif); font-size: 18px; font-weight: 700;
+  color: var(--cream); margin-bottom: 6px;
+}
+.landing-about-founder-role {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); font-family: var(--font-mono); margin-bottom: 20px; display: block;
+}
+.landing-about-founder-quote {
+  font-family: var(--font-serif); font-size: 14px; line-height: 1.85;
+  color: rgba(250,247,242,0.55); font-style: italic;
+  border-left: 2px solid var(--gold); padding-left: 14px; text-align: left; margin: 0;
+}
+
+/* =============================================
    CUSTOM CURSOR
    ============================================= */
 .cursor-dot {
@@ -1012,6 +1085,12 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 /* =============================================
    RESPONSIVE — MOBILE (≤768px)
    ============================================= */
+/* Hide cursor elements on coarse-pointer (touch) devices regardless of viewport */
+@media (pointer: coarse) {
+  .cursor-dot, .cursor-ring, .cursor-particle { display: none !important; }
+  html, body, a, button, [role="button"] { cursor: auto !important; }
+}
+
 @media (max-width: 768px) {
   /* Hide custom cursor on touch devices */
   .cursor-dot, .cursor-ring, .cursor-particle { display: none !important; }
