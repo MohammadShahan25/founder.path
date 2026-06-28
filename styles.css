@@ -4,6 +4,8 @@
    ============================================= */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: hidden; }
+body { overflow-x: hidden; max-width: 100vw; }
 
 :root {
   --cream: #faf7f2;
@@ -1215,6 +1217,21 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
   .hamburger-btn { display: flex; }
   .nav-cta-btn { display: none; }
   .mobile-menu { display: flex; }
+
+  /* LANDING ABOUT SECTION — mobile */
+  .landing-about-section { padding: 64px 20px; }
+  .landing-about-inner { grid-template-columns: 1fr; gap: 36px; }
+  .landing-about-heading { font-size: clamp(28px, 8vw, 44px); }
+  .landing-about-founder-card { padding: 28px 20px; }
+
+  /* DASHBOARD — tighter button row */
+  .dash-right { gap: 5px; overflow-x: auto; flex-wrap: nowrap; max-width: 100%; padding-bottom: 2px; }
+  .dash-icon-btn, .journal-btn, .dict-btn, .market-sim-btn { font-size: 10px; padding: 5px 8px; white-space: nowrap; }
+  .xp-badge, .streak-badge { font-size: 10px; padding: 4px 8px; white-space: nowrap; }
+
+  /* CANVASES — never overflow */
+  canvas { max-width: 100% !important; }
+  #valuationChart { width: 100% !important; }
 
   /* ABOUT PAGE — mobile */
   .about-nav { padding: 16px 20px; }
