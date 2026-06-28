@@ -1132,6 +1132,10 @@ function initLanding() {
   };
   document.getElementById('aboutUsBtn').addEventListener('click', goToAbout);
   document.getElementById('ourMissionBtn').addEventListener('click', goToMission);
+  const landingAboutFullBtn = document.getElementById('landingAboutFullBtn');
+  if (landingAboutFullBtn) landingAboutFullBtn.addEventListener('click', goToAbout);
+  const mobileAboutBtn = document.getElementById('mobileAboutBtn');
+  if (mobileAboutBtn) mobileAboutBtn.addEventListener('click', goToAbout);
   document.getElementById('aboutBackBtn').addEventListener('click', () => showPage('landing'));
   document.getElementById('aboutStartBtn').addEventListener('click', startGame);
   document.getElementById('aboutStartBtn2').addEventListener('click', startGame);
@@ -1637,6 +1641,7 @@ function selectAnswer(choiceIdx) {
 function drawDecisionTree(choices, correctIdx, chosenIdx) {
   const canvas = document.getElementById('dtreeCanvas');
   const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement ? canvas.parentElement.clientWidth : 620;
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
@@ -1679,8 +1684,8 @@ function drawDecisionTree(choices, correctIdx, chosenIdx) {
     ctx.fillText(label, branchX + 14, ty - 10);
 
     // Outcome tag
-    ctx.fillStyle = color; ctx.font = 'bold 9px Inter';
-    ctx.fillText(isCorrect ? 'OPTIMAL PATH' : (isChosen ? 'YOUR CHOICE' : 'ALTERNATIVE'), endX - 18, ty, 90);
+    ctx.fillStyle = color; ctx.font = 'bold 9px Inter'; ctx.textAlign = 'right';
+    ctx.fillText(isCorrect ? 'OPTIMAL PATH' : (isChosen ? 'YOUR CHOICE' : 'WRONG ANSWER'), endX - 4, ty);
   });
 
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.setLineDash([]);
@@ -2061,7 +2066,8 @@ function drawValuationChart() {
     ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(W - 20, y); ctx.stroke();
     const val = maxV - (i / 4) * range;
     ctx.fillStyle = '#6b4f35'; ctx.font = '10px Inter'; ctx.textAlign = 'right';
-    ctx.fillText(val >= 1000 ? `$${(val/1000).toFixed(0)}B` : `$${val.toFixed(0)}M`, 36, y + 4);
+    const valLabel = val >= 1000 ? `$${(val/1000).toFixed(1)}B` : val >= 100 ? `$${val.toFixed(0)}M` : val >= 10 ? `$${val.toFixed(1)}M` : `$${val.toFixed(2)}M`;
+    ctx.fillText(valLabel, 36, y + 4);
   }
 
   // Gradient fill
@@ -2335,6 +2341,7 @@ function initCursorFX() {
   const dot  = document.getElementById('cursorDot');
   const ring = document.getElementById('cursorRing');
   if (!dot || !ring) return;
+  if (!window.matchMedia('(pointer: fine)').matches) return;
 
   let mx = window.innerWidth / 2, my = window.innerHeight / 2;
   let rx = mx, ry = my;
